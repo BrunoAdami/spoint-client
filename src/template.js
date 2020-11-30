@@ -8,3 +8,5 @@ const LoginButton = (props) => {
 const {} = PropTypes;
 
 LoginButton.propTypes = {};
+
+export default LoginButton;
