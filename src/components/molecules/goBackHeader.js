@@ -14,7 +14,7 @@ const GoBackHeader = (props) => {
       }}
     >
       <GoBackIcon
-        style={{ heigth: '5vh', margin: '20px', cursor: 'pointer' }}
+        style={{ height: '5vh', margin: '20px', cursor: 'pointer' }}
         onClick={props.handleGoBackButtonClick}
       />
       <Logo style={{ height: '5vh', margin: '20px' }} />
