@@ -28,11 +28,12 @@ const DropDown = (props) => {
   );
 };
 
-const { func, string } = PropTypes;
+const { func, string, array } = PropTypes;
 
 DropDown.propTypes = {
   handleSelect: func.isRequired,
   value: string.isRequired,
+  items: array.isRequired,
 };
 
 export default DropDown;

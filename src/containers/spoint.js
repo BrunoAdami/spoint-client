@@ -10,13 +10,31 @@ import SignUpPerfomer from '../components/organisms/singUpPerformer';
 
 const Spoint = () => {
   // STATE VARIABLES
-  const [page, setPage] = useState('edit');
+  const [page, setPage] = useState('sign-up-performer');
   const [userInfo, setUserInfo] = useState({
-    username: '',
-    password: '',
     email: '',
-    performerInfo: null,
-    customerInfo: null,
+    password: '',
+  });
+  const [performerInfo, setPerformerInfo] = useState({
+    email: null,
+    password: null,
+    name: null,
+    category: null,
+    genre: null,
+    cost_per_hour: null,
+    profile_pic: null,
+    birthday: null,
+    search_city: null,
+    address: null,
+    fiscal_code: null,
+  });
+  const [customerInfo, setCustomerInfo] = useState({
+    email: null,
+    password: null,
+    name: null,
+    profile_pic: null,
+    address: null,
+    fiscal_code: null,
   });
   const [modalOpen, setModalOpen] = useState({
     welcomeBack: false,
@@ -72,17 +90,83 @@ const Spoint = () => {
       {page === 'who-are-you' && (
         <WhoAreYou
           handleCustomerSelected={() => {
-            setUserInfo({ ...userInfo, customerInfo: { username: '', password: '' } });
-            setPage('sign-up-performer-1');
+            setPage('sign-up-customer');
           }}
           handlePerformerSelected={() => {
-            setUserInfo({ ...userInfo, performerInfo: { username: '', password: '' } });
-            setPage('sign-up-customer-1');
+            setPage('sign-up-performer');
           }}
-          handleGoBackButtonClick={() => setPage('home')}
+          handleGoBackButtonClick={() => setPage('enter-email')}
         />
       )}
-      {page === 'edit' && <SignUpPerfomer />}
+      {page === 'sign-up-performer' && (
+        <SignUpPerfomer
+          nameValue={performerInfo.name}
+          passwordValue={performerInfo.password}
+          categoryValue={performerInfo.category}
+          genreValue={performerInfo.genre}
+          addressValue={performerInfo.address}
+          searchCityValue={performerInfo.search_city}
+          fiscalCodeValue={performerInfo.fiscal_code}
+          costPerHourValue={performerInfo.cost_per_hour}
+          handleGoBackButtonClick={() => setPage('who-are-you')}
+          handleNameTyped={(event) => {
+            setPerformerInfo({
+              ...performerInfo,
+              name: event.target.value,
+            });
+            console.log(performerInfo);
+          }}
+          handlePasswordTyped={(event) => {
+            setPerformerInfo({
+              ...performerInfo,
+              password: event.target.value,
+            });
+            console.log(performerInfo);
+          }}
+          handleCategorySelected={(event, newValue) => {
+            setPerformerInfo({
+              ...performerInfo,
+              category: newValue ? newValue : null,
+            });
+            console.log(performerInfo);
+          }}
+          handleGenreSelected={(event, newValue) => {
+            setPerformerInfo({
+              ...performerInfo,
+              genre: newValue ? newValue : null,
+            });
+            console.log(performerInfo);
+          }}
+          handleAdressTyped={(event) => {
+            setPerformerInfo({
+              ...performerInfo,
+              address: event.target.value,
+            });
+            console.log(performerInfo);
+          }}
+          handleSearchCitySelected={(event, newValue) => {
+            setPerformerInfo({
+              ...performerInfo,
+              search_city: newValue ? newValue : null,
+            });
+            console.log(performerInfo);
+          }}
+          handleFiscalCodeTyped={(event) => {
+            setPerformerInfo({
+              ...performerInfo,
+              fiscal_code: event.target.value,
+            });
+            console.log(performerInfo);
+          }}
+          handleCostPerHourTyped={(event) => {
+            setPerformerInfo({
+              ...performerInfo,
+              cost_per_hour: event.target.value,
+            });
+            console.log(performerInfo);
+          }}
+        />
+      )}
     </div>
   );
 };
