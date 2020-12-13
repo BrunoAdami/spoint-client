@@ -12,7 +12,7 @@ const WhoAreYou = (props) => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          height: '100%',
+          height: '90%',
           alignItems: 'center',
         }}
       >
@@ -22,7 +22,7 @@ const WhoAreYou = (props) => {
             alignItems: 'center',
             flexDirection: 'column',
             width: '75%',
-            marginBottom: '200px',
+            marginBottom: '100px',
           }}
         >
           <text style={{ fontSize: 'xx-large', fontWeight: 'bold', marginBottom: '20px' }}>WHO ARE YOU?</text>
