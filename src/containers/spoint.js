@@ -7,14 +7,19 @@ import WhoAreYou from '../components/organisms/whoAreYou';
 import Modal from '../components/molecules/modal';
 import EnterEmail from '../components/organisms/enterEmail';
 import SignUpPerfomer from '../components/organisms/singUpPerformer';
+import SignUpCustomer from '../components/organisms/singUpCustomer';
 
 const Spoint = () => {
-  // STATE VARIABLES
+  // <<<<<<<<<<<<<< STATE VARIABLES >>>>>>>>>>>>>>>
+
+  // Page
   const [page, setPage] = useState('home');
+  // General User
   const [userInfo, setUserInfo] = useState({
     email: null,
     password: null,
   });
+  // Performer
   const [performerInfo, setPerformerInfo] = useState({
     email: null,
     password: null,
@@ -37,18 +42,31 @@ const Spoint = () => {
     success: false,
     error: false,
   });
+  // Customer
   const [customerInfo, setCustomerInfo] = useState({
     email: null,
     password: null,
     name: null,
-    profile_pic: null,
+    profile_pic: {
+      data: null,
+      uploading: null,
+      url: null,
+    },
     address: null,
     fiscal_code: null,
   });
+  const [customerRegistration, setCustomerRegistration] = useState({
+    loading: false,
+    success: false,
+    error: false,
+  });
+  // Modals
   const [modalOpen, setModalOpen] = useState({
     welcomeBack: false,
   });
-  // METHODS
+
+  // <<<<<<<<<<<<<<< METHODS >>>>>>>>>>>>>>>
+
   const editBirthdayString = (value) => {
     let v = value.replace(/\D/g, '').slice(0, 10);
     if (v.length >= 5) {
@@ -58,7 +76,9 @@ const Spoint = () => {
     }
     return v;
   };
-  // RETURN FUCTION
+
+  // <<<<<<<<<<<<<<< RETURN FUNCTION >>>>>>>>>>>>>>>
+
   return (
     <div style={backgroundStyles}>
       {/* <<<<<<<<<<<<< HOME PAGE >>>>>>>>>>>>>>> */}
@@ -122,6 +142,9 @@ const Spoint = () => {
           handleGoBackButtonClick={() => setPage('enter-email')}
         />
       )}
+
+      {/* ///////////// PERFORMER SIGN UP ///////////// */}
+
       {page === 'sign-up-performer' && (
         <SignUpPerfomer
           nameValue={performerInfo.name}
@@ -269,6 +292,125 @@ const Spoint = () => {
           loading={performerRegistration.loading}
           success={performerRegistration.success}
           error={performerRegistration.error}
+        />
+      )}
+
+      {/* ///////////// CUSTOMER SIGN UP ///////////// */}
+
+      {page === 'sign-up-customer' && (
+        <SignUpCustomer
+          nameValue={customerInfo.name}
+          passwordValue={customerInfo.password}
+          addressValue={customerInfo.address}
+          fiscalCodeValue={customerInfo.fiscal_code}
+          birthdayValue={customerInfo.birthday}
+          profilePicValue={customerInfo.profile_pic}
+          handleGoBackButtonClick={() => setPage('who-are-you')}
+          handleNameTyped={(event) => {
+            const { value } = event.target;
+            setCustomerInfo({
+              ...customerInfo,
+              name: value,
+            });
+            console.log(customerInfo);
+          }}
+          handlePasswordTyped={(event) => {
+            const { value } = event.target;
+            setCustomerInfo({
+              ...customerInfo,
+              password: value,
+            });
+            console.log(customerInfo);
+          }}
+          handleAdressTyped={(event) => {
+            const { value } = event.target;
+            setCustomerInfo({
+              ...customerInfo,
+              address: value,
+            });
+            console.log(customerInfo);
+          }}
+          handleFiscalCodeTyped={(event) => {
+            const { value } = event.target;
+            setCustomerInfo({
+              ...customerInfo,
+              fiscal_code: value,
+            });
+            console.log(customerInfo);
+          }}
+          handleBirthdayTyped={(event) => {
+            const { value } = event.target;
+            setCustomerInfo({
+              ...customerInfo,
+              birthday: editBirthdayString(value),
+            });
+            console.log(customerInfo);
+          }}
+          handleRemoveProfilePic={() => {
+            setCustomerInfo({
+              ...customerInfo,
+              profile_pic: {
+                data: null,
+                uploading: null,
+                url: null,
+              },
+            });
+          }}
+          handleUploadProfilePic={(event) => {
+            const file = event.target.files[0];
+            event.target.value = null;
+            const profilePic = new FormData();
+            profilePic.append('image', file);
+            setCustomerInfo({
+              ...customerInfo,
+              profile_pic: {
+                ...customerInfo.profile_pic,
+                data: null,
+                uploading: true,
+              },
+            });
+            setTimeout(() => {
+              setCustomerInfo({
+                ...customerInfo,
+                profile_pic: {
+                  ...customerInfo.profile_pic,
+                  data: profilePic,
+                  uploading: false,
+                  url: URL.createObjectURL(file),
+                },
+              });
+              console.log(customerInfo);
+            }, 2000);
+          }}
+          handleCloseSuccessModal={() => {
+            setPage('home-customer');
+            setCustomerRegistration({
+              ...customerRegistration,
+              success: false,
+            });
+          }}
+          handleCloseErrorModal={() => {
+            setCustomerRegistration({
+              ...customerRegistration,
+              error: false,
+            });
+          }}
+          handleSubmitCustomerInfo={() => {
+            setCustomerRegistration({
+              ...customerRegistration,
+              loading: true,
+            });
+            setTimeout(() => {
+              setCustomerRegistration({
+                ...customerRegistration,
+                success: true,
+                loading: false,
+              });
+            }, 2000);
+          }}
+          loading={customerRegistration.loading}
+          success={customerRegistration.success}
+          error={customerRegistration.error}
         />
       )}
     </div>

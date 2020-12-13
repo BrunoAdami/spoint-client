@@ -3,26 +3,13 @@ import PropTypes from 'prop-types';
 import Button from '../../atoms/loginButton';
 import GoBackHeader from '../../molecules/goBackHeader';
 import Input from '../../atoms/input';
-import DropDown from '../../atoms/dropDown';
-import Autocomplete from '../../atoms/autocomplete';
-import GENRES from '../../../genres.json';
-import { ITALIAN_CITIES } from '../../../istat-cities.json';
 import ProfilePicIcon from '../../atoms/profilePicIcon';
 import Loader from '../../atoms/loader';
 import Modal from '../../molecules/modal';
 
-const SignUpPerformer = (props) => {
+const SignUpCustomer = (props) => {
   // STATE VARIABLES
   const [step, setStep] = useState(0);
-  const [welcomeModal, setWelcomeModal] = useState(false);
-  // DATA VARIABLES
-  const MUSIC_GENRES = useRef(GENRES.map((item) => ({ value: item, name: item })));
-  const CATEGORIES = useRef([
-    { value: 'Singer', name: 'Singer' },
-    { value: 'Band', name: 'Band' },
-    { value: 'Stand-up comedy', name: 'Stand-up comedy' },
-  ]);
-  const ITALY_CITIES = useRef(ITALIAN_CITIES.map((item) => ({ value: item, name: item })));
   // other
   const NotLoadingOrSuccessOrError = !props.loading && !props.success && !props.error;
   return (
@@ -66,12 +53,6 @@ const SignUpPerformer = (props) => {
                 placeholder="FULL NAME"
               />
               <Input
-                value={props.birthdayValue}
-                style={{ marginBottom: 20 }}
-                handleInputTyped={props.handleBirthdayTyped}
-                placeholder="BIRTHDAY"
-              />
-              <Input
                 value={props.passwordValue}
                 type="password"
                 handleInputTyped={props.handlePasswordTyped}
@@ -86,7 +67,7 @@ const SignUpPerformer = (props) => {
               </Button>
             </div>
           )}
-          {/* <<<<<<<<<<<<<<< SECOND STEP: CATEGORY & GENRE >>>>>>>>>>>>>> */}
+          {/* <<<<<<<<<<<<<<< SECOND STEP: LOCATION & FINANCIAL>>>>>>>>>>>>>> */}
           {step === 1 && NotLoadingOrSuccessOrError && (
             <div
               style={{
@@ -97,64 +78,7 @@ const SignUpPerformer = (props) => {
               }}
             >
               <text style={{ fontSize: 'xx-large', fontWeight: 'bold', marginBottom: '20px' }}>
-                {'SELECT YOUR CATEGORY'}
-              </text>
-              <Autocomplete
-                options={CATEGORIES.current}
-                handleOptionSelected={props.handleCategorySelected}
-                label={'CATEGORY'}
-                value={props.categoryValue}
-              />
-              {((props.categoryValue && props.categoryValue.value === 'Singer') ||
-                (props.categoryValue && props.categoryValue.value === 'Band')) && (
-                <div style={{ marginTop: 20, width: '100%', maxWidth: 400 }}>
-                  <Autocomplete
-                    options={MUSIC_GENRES.current}
-                    handleOptionSelected={props.handleGenreSelected}
-                    label={'GENRE'}
-                    value={props.genreValue}
-                  />
-                </div>
-              )}
-              <div style={{ display: 'flex', width: '100%', maxWidth: 400 }}>
-                {step > 0 && (
-                  <Button
-                    style={{ marginTop: '40px', width: '100%', marginRight: 20 }}
-                    onClick={() => setStep(step - 1)}
-                  >
-                    GO BACK
-                  </Button>
-                )}
-                <Button
-                  style={{ marginTop: '40px', width: '100%' }}
-                  onClick={() => setStep(step + 1)}
-                  disabled={
-                    props.categoryValue
-                      ? props.categoryValue.value === 'Singer' || props.categoryValue.value === 'Band'
-                        ? props.genreValue
-                          ? false
-                          : true
-                        : false
-                      : true
-                  }
-                >
-                  CONTINUE
-                </Button>
-              </div>
-            </div>
-          )}
-          {/* <<<<<<<<<<<<<<< THIRD STEP: LOCATION (ADDRESS AND SEARCH CITY)>>>>>>>>>>>>>> */}
-          {step === 2 && NotLoadingOrSuccessOrError && (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                flexDirection: 'column',
-                width: '100%',
-              }}
-            >
-              <text style={{ fontSize: 'xx-large', fontWeight: 'bold', marginBottom: '20px' }}>
-                {'LOCATION PREFERENCES'}
+                {'LOCATION & FINANCIAL'}
               </text>
               <Input
                 value={props.addressValue}
@@ -162,57 +86,12 @@ const SignUpPerformer = (props) => {
                 handleInputTyped={props.handleAdressTyped}
                 placeholder="YOUR ADDRESS"
               />
-              <Autocomplete
-                options={ITALY_CITIES.current}
-                handleOptionSelected={props.handleSearchCitySelected}
-                label={'CITY TO FIND JOB'}
-                value={props.searchCityValue}
-              />
-              <div style={{ display: 'flex', width: '100%', maxWidth: 400 }}>
-                {step > 0 && (
-                  <Button
-                    style={{ marginTop: '40px', width: '100%', marginRight: 20 }}
-                    onClick={() => setStep(step - 1)}
-                  >
-                    GO BACK
-                  </Button>
-                )}
-                <Button
-                  style={{ marginTop: '40px', width: '100%' }}
-                  onClick={() => setStep(step + 1)}
-                  disabled={props.addressValue && props.searchCityValue ? false : true}
-                >
-                  CONTINUE
-                </Button>
-              </div>
-            </div>
-          )}
-          {/* <<<<<<<<<<<<<<< FORTH STEP: FINANCIAL INFO (COST PER HOUR AND FISCAL CODE)>>>>>>>>>>>>>> */}
-          {step === 3 && NotLoadingOrSuccessOrError && (
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                flexDirection: 'column',
-                width: '100%',
-              }}
-            >
-              <text style={{ fontSize: 'xx-large', fontWeight: 'bold', marginBottom: '20px' }}>
-                {'FINANCIAL INFORMATION'}
-              </text>
               <Input
                 value={props.fiscalCodeValue}
                 style={{ marginBottom: 20 }}
                 handleInputTyped={props.handleFiscalCodeTyped}
                 placeholder="FISCAL CODE"
               />
-              <Input
-                value={props.costPerHourValue}
-                handleInputTyped={props.handleCostPerHourTyped}
-                placeholder="PRICE PER HOUR €"
-                type="number"
-              />
-
               <div style={{ display: 'flex', width: '100%', maxWidth: 400 }}>
                 {step > 0 && (
                   <Button
@@ -225,15 +104,15 @@ const SignUpPerformer = (props) => {
                 <Button
                   style={{ marginTop: '40px', width: '100%' }}
                   onClick={() => setStep(step + 1)}
-                  disabled={props.fiscalCodeValue && props.costPerHourValue ? false : true}
+                  disabled={props.addressValue && props.fiscalCodeValue ? false : true}
                 >
                   CONTINUE
                 </Button>
               </div>
             </div>
           )}
-          {/* <<<<<<<<<<<<<<< FIFTH STEP: PROFILE PICTURE>>>>>>>>>>>>>> */}
-          {step === 4 && NotLoadingOrSuccessOrError && (
+          {/* <<<<<<<<<<<<<<< THIRD STEP: PROFILE PICTURE>>>>>>>>>>>>>> */}
+          {step === 2 && NotLoadingOrSuccessOrError && (
             <div
               style={{
                 display: 'flex',
@@ -331,26 +210,18 @@ const SignUpPerformer = (props) => {
 
 const { func, any, bool } = PropTypes;
 
-SignUpPerformer.propTypes = {
+SignUpCustomer.propTypes = {
   nameValue: any.isRequired,
   passwordValue: any.isRequired,
-  categoryValue: any.isRequired,
-  genreValue: any.isRequired,
   addressValue: any.isRequired,
-  searchCityValue: any.isRequired,
   fiscalCodeValue: any.isRequired,
-  costPerHourValue: any.isRequired,
   birthdayValue: any.isRequired,
   profilePicValue: any.isRequired,
   handleGoBackButtonClick: func.isRequired,
   handleNameTyped: func.isRequired,
   handlePasswordTyped: func.isRequired,
-  handleCategorySelected: func.isRequired,
-  handleGenreSelected: func.isRequired,
   handleAdressTyped: func.isRequired,
-  handleSearchCitySelected: func.isRequired,
   handleFiscalCodeTyped: func.isRequired,
-  handleCostPerHourTyped: func.isRequired,
   handleBirthdayTyped: func.isRequired,
   handleRemoveProfilePic: func.isRequired,
   handleUploadProfilePic: func.isRequired,
@@ -362,4 +233,4 @@ SignUpPerformer.propTypes = {
   error: bool.isRequired,
 };
 
-export default SignUpPerformer;
+export default SignUpCustomer;
