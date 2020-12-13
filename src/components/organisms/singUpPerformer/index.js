@@ -7,9 +7,11 @@ import DropDown from '../../atoms/dropDown';
 import Autocomplete from '../../atoms/autocomplete';
 import GENRES from '../../../genres.json';
 import { ITALIAN_CITIES } from '../../../istat-cities.json';
+import ProfilePicIcon from '../../atoms/profilePicIcon';
+import Loader from '../../atoms/loader';
 
 const SignUpPerformer = (props) => {
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(4);
   const MUSIC_GENRES = useRef(GENRES.map((item) => ({ value: item, name: item })));
   const CATEGORIES = useRef([
     { value: 'Singer', name: 'Singer' },
@@ -226,6 +228,66 @@ const SignUpPerformer = (props) => {
             </div>
           )}
           {/* <<<<<<<<<<<<<<< FIFTH STEP: PROFILE PICTURE>>>>>>>>>>>>>> */}
+          {step === 4 && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'column',
+                width: '100%',
+              }}
+            >
+              <text style={{ fontSize: 'xx-large', fontWeight: 'bold', marginBottom: '20px' }}>
+                {'PROFILE PICTURE'}
+              </text>
+              {props.profilePicValue.url && !props.profilePicValue.uploading && (
+                <img
+                  alt="Profile"
+                  style={{ height: '150px', borderRadius: '15px', marginBottom: '20px' }}
+                  src={props.profilePicValue.url}
+                />
+              )}
+              {!props.profilePicValue.url && !props.profilePicValue.uploading && (
+                <ProfilePicIcon
+                  style={{
+                    height: '12vh',
+                    maxHeight: '100px',
+                    margin: '20px',
+                  }}
+                />
+              )}
+              {props.profilePicValue.uploading && <Loader style={{ height: '48px', margin: '20px' }} />}
+              <input
+                accept="image/*"
+                style={{ display: 'none' }}
+                id="raised-button-file"
+                type="file"
+                onChange={props.handleUploadProfilePic}
+              />
+              <label htmlFor="raised-button-file">
+                <Button onClick={props.handleRemoveProfilePic} component="span">
+                  UPLOAD PICTURE
+                </Button>
+              </label>
+              <div style={{ display: 'flex', width: '100%', maxWidth: 400 }}>
+                {step > 0 && (
+                  <Button
+                    style={{ marginTop: '40px', width: '100%', marginRight: 20 }}
+                    onClick={() => setStep(step - 1)}
+                  >
+                    GO BACK
+                  </Button>
+                )}
+                <Button
+                  style={{ marginTop: '40px', width: '100%' }}
+                  onClick={() => setStep(step + 1)}
+                  disabled={props.profilePicValue ? (props.profilePicValue.data ? false : true) : true}
+                >
+                  FINISH
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -244,6 +306,7 @@ SignUpPerformer.propTypes = {
   fiscalCodeValue: any.isRequired,
   costPerHourValue: any.isRequired,
   birthdayValue: any.isRequired,
+  profilePicValue: any.isRequired,
   handleGoBackButtonClick: func.isRequired,
   handleNameTyped: func.isRequired,
   handlePasswordTyped: func.isRequired,
@@ -254,6 +317,8 @@ SignUpPerformer.propTypes = {
   handleFiscalCodeTyped: func.isRequired,
   handleCostPerHourTyped: func.isRequired,
   handleBirthdayTyped: func.isRequired,
+  handleRemoveProfilePic: func.isRequired,
+  handleUploadProfilePic: func.isRequired,
 };
 
 export default SignUpPerformer;

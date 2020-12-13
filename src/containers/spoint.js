@@ -22,7 +22,11 @@ const Spoint = () => {
     category: null,
     genre: null,
     cost_per_hour: null,
-    profile_pic: null,
+    profile_pic: {
+      data: null,
+      uploading: null,
+      url: null,
+    },
     birthday: null,
     search_city: null,
     address: null,
@@ -119,6 +123,7 @@ const Spoint = () => {
           fiscalCodeValue={performerInfo.fiscal_code}
           costPerHourValue={performerInfo.cost_per_hour}
           birthdayValue={performerInfo.birthday}
+          profilePicValue={performerInfo.profile_pic}
           handleGoBackButtonClick={() => setPage('who-are-you')}
           handleNameTyped={(event) => {
             const { value } = event.target;
@@ -188,6 +193,42 @@ const Spoint = () => {
               birthday: editBirthdayString(value),
             });
             console.log(performerInfo);
+          }}
+          handleRemoveProfilePic={() => {
+            setPerformerInfo({
+              ...performerInfo,
+              profile_pic: {
+                data: null,
+                uploading: null,
+                url: null,
+              },
+            });
+          }}
+          handleUploadProfilePic={(event) => {
+            const file = event.target.files[0];
+            event.target.value = null;
+            const profilePic = new FormData();
+            profilePic.append('image', file);
+            setPerformerInfo({
+              ...performerInfo,
+              profile_pic: {
+                ...performerInfo.profile_pic,
+                data: null,
+                uploading: true,
+              },
+            });
+            setTimeout(() => {
+              setPerformerInfo({
+                ...performerInfo,
+                profile_pic: {
+                  ...performerInfo.profile_pic,
+                  data: profilePic,
+                  uploading: false,
+                  url: URL.createObjectURL(file),
+                },
+              });
+              console.log(performerInfo);
+            }, 2000);
           }}
         />
       )}
