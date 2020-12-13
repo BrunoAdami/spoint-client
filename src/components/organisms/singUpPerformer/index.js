@@ -9,9 +9,13 @@ import GENRES from '../../../genres.json';
 import { ITALIAN_CITIES } from '../../../istat-cities.json';
 import ProfilePicIcon from '../../atoms/profilePicIcon';
 import Loader from '../../atoms/loader';
+import Modal from '../../molecules/modal';
 
 const SignUpPerformer = (props) => {
-  const [step, setStep] = useState(4);
+  // STATE VARIABLES
+  const [step, setStep] = useState(0);
+  const [welcomeModal, setWelcomeModal] = useState(false);
+  // DATA VARIABLES
   const MUSIC_GENRES = useRef(GENRES.map((item) => ({ value: item, name: item })));
   const CATEGORIES = useRef([
     { value: 'Singer', name: 'Singer' },
@@ -19,7 +23,8 @@ const SignUpPerformer = (props) => {
     { value: 'Stand-up comedy', name: 'Stand-up comedy' },
   ]);
   const ITALY_CITIES = useRef(ITALIAN_CITIES.map((item) => ({ value: item, name: item })));
-
+  // other
+  const NotLoadingOrSuccessOrError = !props.loading && !props.success && !props.error;
   return (
     <div style={{ height: '100%' }}>
       <GoBackHeader style={{ position: 'absolute', top: 0 }} handleGoBackButtonClick={props.handleGoBackButtonClick} />
@@ -28,7 +33,7 @@ const SignUpPerformer = (props) => {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          height: '100%',
+          height: '90%',
           alignItems: 'center',
         }}
       >
@@ -42,7 +47,7 @@ const SignUpPerformer = (props) => {
           }}
         >
           {/* <<<<<<<<<<<<<<< FIRST STEP: NAME & PASSWORD >>>>>>>>>>>>>> */}
-          {step === 0 && (
+          {step === 0 && NotLoadingOrSuccessOrError && (
             <div
               style={{
                 display: 'flex',
@@ -82,7 +87,7 @@ const SignUpPerformer = (props) => {
             </div>
           )}
           {/* <<<<<<<<<<<<<<< SECOND STEP: CATEGORY & GENRE >>>>>>>>>>>>>> */}
-          {step === 1 && (
+          {step === 1 && NotLoadingOrSuccessOrError && (
             <div
               style={{
                 display: 'flex',
@@ -139,7 +144,7 @@ const SignUpPerformer = (props) => {
             </div>
           )}
           {/* <<<<<<<<<<<<<<< THIRD STEP: LOCATION (ADDRESS AND SEARCH CITY)>>>>>>>>>>>>>> */}
-          {step === 2 && (
+          {step === 2 && NotLoadingOrSuccessOrError && (
             <div
               style={{
                 display: 'flex',
@@ -183,7 +188,7 @@ const SignUpPerformer = (props) => {
             </div>
           )}
           {/* <<<<<<<<<<<<<<< FORTH STEP: FINANCIAL INFO (COST PER HOUR AND FISCAL CODE)>>>>>>>>>>>>>> */}
-          {step === 3 && (
+          {step === 3 && NotLoadingOrSuccessOrError && (
             <div
               style={{
                 display: 'flex',
@@ -228,7 +233,7 @@ const SignUpPerformer = (props) => {
             </div>
           )}
           {/* <<<<<<<<<<<<<<< FIFTH STEP: PROFILE PICTURE>>>>>>>>>>>>>> */}
-          {step === 4 && (
+          {step === 4 && NotLoadingOrSuccessOrError && (
             <div
               style={{
                 display: 'flex',
@@ -280,7 +285,7 @@ const SignUpPerformer = (props) => {
                 )}
                 <Button
                   style={{ marginTop: '40px', width: '100%' }}
-                  onClick={() => setStep(step + 1)}
+                  onClick={props.handleSubmitCustomerInfo}
                   disabled={props.profilePicValue ? (props.profilePicValue.data ? false : true) : true}
                 >
                   FINISH
@@ -288,13 +293,39 @@ const SignUpPerformer = (props) => {
               </div>
             </div>
           )}
+          {/* <<<<<<<<<<<<<<< LOADING SCREEN >>>>>>>>>>>>>> */}
+          {props.loading && (
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'column',
+                width: '100%',
+              }}
+            >
+              <Loader style={{ height: '48px', margin: '20px' }} />
+              <text style={{ fontSize: 'xx-large', fontWeight: 'bold' }}>{'LOADING...'}</text>
+            </div>
+          )}
+          {/* <<<<<<<<<<<<<<< SUCCESS SCREEN >>>>>>>>>>>>>> */}
+          {props.success && (
+            <Modal
+              title="ALL INFORMATIONS HAVE BEEN VALIDATED"
+              subTitle="WE WISH YOU A NICE EXPERIENCE ON SPOINT"
+              handleCloseButton={props.handleCloseSuccessModal}
+            />
+          )}
+          {/* <<<<<<<<<<<<<<< ERROR SCREEN >>>>>>>>>>>>>> */}
+          {props.error && (
+            <Modal title="AN ERROR OCURRED" subTitle="JUST TRY AGAIN" handleCloseButton={props.handleCloseErrorModal} />
+          )}
         </div>
       </div>
     </div>
   );
 };
 
-const { func, any } = PropTypes;
+const { func, any, bool } = PropTypes;
 
 SignUpPerformer.propTypes = {
   nameValue: any.isRequired,
@@ -319,6 +350,12 @@ SignUpPerformer.propTypes = {
   handleBirthdayTyped: func.isRequired,
   handleRemoveProfilePic: func.isRequired,
   handleUploadProfilePic: func.isRequired,
+  handleCloseSuccessModal: func.isRequired,
+  handleCloseErrorModal: func.isRequired,
+  handleSubmitCustomerInfo: func.isRequired,
+  loading: bool.isRequired,
+  success: bool.isRequired,
+  error: bool.isRequired,
 };
 
 export default SignUpPerformer;

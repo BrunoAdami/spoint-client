@@ -32,6 +32,11 @@ const Spoint = () => {
     address: null,
     fiscal_code: null,
   });
+  const [performerRegistration, setPerformerRegistration] = useState({
+    loading: false,
+    success: false,
+    error: false,
+  });
   const [customerInfo, setCustomerInfo] = useState({
     email: null,
     password: null,
@@ -230,6 +235,35 @@ const Spoint = () => {
               console.log(performerInfo);
             }, 2000);
           }}
+          handleCloseSuccessModal={() => {
+            setPage('home-performer');
+            setPerformerRegistration({
+              ...performerRegistration,
+              success: false,
+            });
+          }}
+          handleCloseErrorModal={() => {
+            setPerformerRegistration({
+              ...performerRegistration,
+              error: false,
+            });
+          }}
+          handleSubmitCustomerInfo={() => {
+            setPerformerRegistration({
+              ...performerRegistration,
+              loading: true,
+            });
+            setTimeout(() => {
+              setPerformerRegistration({
+                ...performerRegistration,
+                success: true,
+                loading: false,
+              });
+            }, 2000);
+          }}
+          loading={performerRegistration.loading}
+          success={performerRegistration.success}
+          error={performerRegistration.error}
         />
       )}
     </div>
