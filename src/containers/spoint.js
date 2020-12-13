@@ -10,7 +10,7 @@ import SignUpPerfomer from '../components/organisms/singUpPerformer';
 
 const Spoint = () => {
   // STATE VARIABLES
-  const [page, setPage] = useState('sign-up-performer');
+  const [page, setPage] = useState('home');
   const [userInfo, setUserInfo] = useState({
     email: '',
     password: '',
