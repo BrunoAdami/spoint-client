@@ -8,12 +8,13 @@ import Modal from '../components/molecules/modal';
 import EnterEmail from '../components/organisms/enterEmail';
 import SignUpPerfomer from '../components/organisms/singUpPerformer';
 import SignUpCustomer from '../components/organisms/singUpCustomer';
+import PerformerCard from '../components/molecules/performerCard';
 
 const Spoint = () => {
   // <<<<<<<<<<<<<< STATE VARIABLES >>>>>>>>>>>>>>>
 
   // Page
-  const [page, setPage] = useState('home');
+  const [page, setPage] = useState('test');
   // General User
   const [userInfo, setUserInfo] = useState({
     email: null,
@@ -411,6 +412,18 @@ const Spoint = () => {
           loading={customerRegistration.loading}
           success={customerRegistration.success}
           error={customerRegistration.error}
+        />
+      )}
+      {/* <<<<<<<<<<<<< TEST AREA >>>>>>>>>>>>>> */}
+      {page === 'test' && (
+        <PerformerCard
+          name="Martin Tourret"
+          category="Singer"
+          genre="pop music"
+          price_per_hour={230.5}
+          profile_pic_url={
+            'https://media-exp1.licdn.com/dms/image/C5603AQEVQ6n3joIo2g/profile-displayphoto-shrink_800_800/0/1572341491806?e=1613606400&v=beta&t=yW7NoJxV44vqj7MOMNJmiH-dlbFIKcgJjbYMgeIfImQ'
+          }
         />
       )}
     </div>
