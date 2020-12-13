@@ -12,8 +12,8 @@ const Spoint = () => {
   // STATE VARIABLES
   const [page, setPage] = useState('home');
   const [userInfo, setUserInfo] = useState({
-    email: '',
-    password: '',
+    email: null,
+    password: null,
   });
   const [performerInfo, setPerformerInfo] = useState({
     email: null,
@@ -81,11 +81,13 @@ const Spoint = () => {
             setUserInfo({ ...userInfo, password: event.target.value });
             console.log(userInfo);
           }}
-          handleUsernameTyped={(event) => {
-            setUserInfo({ ...userInfo, username: event.target.value });
+          handleEmailTyped={(event) => {
+            setUserInfo({ ...userInfo, email: event.target.value });
             console.log(userInfo);
           }}
           handleGoBackButtonClick={() => setPage('home')}
+          emailValue={userInfo.email}
+          passwordValue={userInfo.password}
         />
       )}
       {/* Welcome back */}
@@ -101,6 +103,7 @@ const Spoint = () => {
 
       {page === 'enter-email' && (
         <EnterEmail
+          emailValue={userInfo.email}
           handleEmailTyped={(event) => setUserInfo({ ...userInfo, email: event.target.value })}
           handleSubmitEmail={() => setPage('who-are-you')}
           handleGoBackButtonClick={() => setPage('home')}
@@ -109,9 +112,11 @@ const Spoint = () => {
       {page === 'who-are-you' && (
         <WhoAreYou
           handleCustomerSelected={() => {
+            setCustomerInfo({ ...customerInfo, email: userInfo.email });
             setPage('sign-up-customer');
           }}
           handlePerformerSelected={() => {
+            setPerformerInfo({ ...performerInfo, email: userInfo.email });
             setPage('sign-up-performer');
           }}
           handleGoBackButtonClick={() => setPage('enter-email')}

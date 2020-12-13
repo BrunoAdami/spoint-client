@@ -43,7 +43,7 @@ const SignUpPerformer = (props) => {
             alignItems: 'center',
             flexDirection: 'column',
             width: '75%',
-            marginBottom: '200px',
+            marginBottom: '100px',
           }}
         >
           {/* <<<<<<<<<<<<<<< FIRST STEP: NAME & PASSWORD >>>>>>>>>>>>>> */}

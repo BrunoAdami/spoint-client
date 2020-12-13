@@ -27,9 +27,18 @@ const LoginPage = (props) => {
           }}
         >
           <text style={{ fontSize: 'xx-large', fontWeight: 'bold', marginBottom: '20px' }}>FILL YOUR INFORMATIONS</text>
-          <Input handleInputTyped={props.handleUsernameTyped} placeholder="USERNAME" />
-          <Input style={{ marginTop: '20px' }} handleInputTyped={props.handlePasswordTyped} placeholder="PASSWORD" />
-          <Button style={{ marginTop: '20px', width: '100%' }} onClick={props.handleSubmitLogin}>
+          <Input handleInputTyped={props.handleEmailTyped} placeholder="EMAIL" value={props.emailValue} />
+          <Input
+            style={{ marginTop: '20px' }}
+            handleInputTyped={props.handlePasswordTyped}
+            placeholder="PASSWORD"
+            value={props.passwordValue}
+          />
+          <Button
+            style={{ marginTop: '20px', width: '100%' }}
+            onClick={props.handleSubmitLogin}
+            disabled={props.passwordValue && props.emailValue ? false : true}
+          >
             SUBMIT
           </Button>
           <text
@@ -50,14 +59,16 @@ const LoginPage = (props) => {
   );
 };
 
-const { func } = PropTypes;
+const { func, any } = PropTypes;
 
 LoginPage.propTypes = {
-  handleUsernameTyped: func.isRequired,
+  handleEmailTyped: func.isRequired,
   handlePasswordTyped: func.isRequired,
   handleSubmitLogin: func.isRequired,
   handleForgotPassword: func.isRequired,
   handleGoBackButtonClick: func.isRequired,
+  emailValue: any.isRequired,
+  passwordValue: any.isRequired,
 };
 
 export default LoginPage;
