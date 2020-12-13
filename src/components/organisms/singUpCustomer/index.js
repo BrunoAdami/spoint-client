@@ -196,7 +196,11 @@ const SignUpCustomer = (props) => {
           )}
           {/* <<<<<<<<<<<<<<< ERROR SCREEN >>>>>>>>>>>>>> */}
           {props.error && (
-            <Modal title="AN ERROR OCURRED" subTitle="JUST TRY AGAIN" handleCloseButton={props.handleCloseErrorModal} />
+            <Modal
+              title="AN ERROR OCCURRED"
+              subTitle="JUST TRY AGAIN"
+              handleCloseButton={props.handleCloseErrorModal}
+            />
           )}
         </div>
       </div>
