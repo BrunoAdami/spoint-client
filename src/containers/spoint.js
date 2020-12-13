@@ -39,6 +39,16 @@ const Spoint = () => {
   const [modalOpen, setModalOpen] = useState({
     welcomeBack: false,
   });
+  // METHODS
+  const editBirthdayString = (value) => {
+    let v = value.replace(/\D/g, '').slice(0, 10);
+    if (v.length >= 5) {
+      return `${v.slice(0, 2)}/${v.slice(2, 4)}/${v.slice(4)}`;
+    } else if (v.length >= 3) {
+      return `${v.slice(0, 2)}/${v.slice(2)}`;
+    }
+    return v;
+  };
   // RETURN FUCTION
   return (
     <div style={backgroundStyles}>
@@ -108,18 +118,21 @@ const Spoint = () => {
           searchCityValue={performerInfo.search_city}
           fiscalCodeValue={performerInfo.fiscal_code}
           costPerHourValue={performerInfo.cost_per_hour}
+          birthdayValue={performerInfo.birthday}
           handleGoBackButtonClick={() => setPage('who-are-you')}
           handleNameTyped={(event) => {
+            const { value } = event.target;
             setPerformerInfo({
               ...performerInfo,
-              name: event.target.value,
+              name: value,
             });
             console.log(performerInfo);
           }}
           handlePasswordTyped={(event) => {
+            const { value } = event.target;
             setPerformerInfo({
               ...performerInfo,
-              password: event.target.value,
+              password: value,
             });
             console.log(performerInfo);
           }}
@@ -138,9 +151,10 @@ const Spoint = () => {
             console.log(performerInfo);
           }}
           handleAdressTyped={(event) => {
+            const { value } = event.target;
             setPerformerInfo({
               ...performerInfo,
-              address: event.target.value,
+              address: value,
             });
             console.log(performerInfo);
           }}
@@ -152,16 +166,26 @@ const Spoint = () => {
             console.log(performerInfo);
           }}
           handleFiscalCodeTyped={(event) => {
+            const { value } = event.target;
             setPerformerInfo({
               ...performerInfo,
-              fiscal_code: event.target.value,
+              fiscal_code: value,
             });
             console.log(performerInfo);
           }}
           handleCostPerHourTyped={(event) => {
+            const { value } = event.target;
             setPerformerInfo({
               ...performerInfo,
-              cost_per_hour: event.target.value,
+              cost_per_hour: value,
+            });
+            console.log(performerInfo);
+          }}
+          handleBirthdayTyped={(event) => {
+            const { value } = event.target;
+            setPerformerInfo({
+              ...performerInfo,
+              birthday: editBirthdayString(value),
             });
             console.log(performerInfo);
           }}

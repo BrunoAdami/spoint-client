@@ -59,6 +59,12 @@ const SignUpPerformer = (props) => {
                 placeholder="FULL NAME"
               />
               <Input
+                value={props.birthdayValue}
+                style={{ marginBottom: 20 }}
+                handleInputTyped={props.handleBirthdayTyped}
+                placeholder="BIRTHDAY"
+              />
+              <Input
                 value={props.passwordValue}
                 type="password"
                 handleInputTyped={props.handlePasswordTyped}
@@ -237,6 +243,7 @@ SignUpPerformer.propTypes = {
   searchCityValue: any.isRequired,
   fiscalCodeValue: any.isRequired,
   costPerHourValue: any.isRequired,
+  birthdayValue: any.isRequired,
   handleGoBackButtonClick: func.isRequired,
   handleNameTyped: func.isRequired,
   handlePasswordTyped: func.isRequired,
@@ -246,6 +253,7 @@ SignUpPerformer.propTypes = {
   handleSearchCitySelected: func.isRequired,
   handleFiscalCodeTyped: func.isRequired,
   handleCostPerHourTyped: func.isRequired,
+  handleBirthdayTyped: func.isRequired,
 };
 
 export default SignUpPerformer;
