@@ -9,12 +9,14 @@ import EnterEmail from '../components/organisms/enterEmail';
 import SignUpPerfomer from '../components/organisms/singUpPerformer';
 import SignUpCustomer from '../components/organisms/singUpCustomer';
 import PerformerCard from '../components/molecules/performerCard';
+import AppBar from '../components/molecules/appBar';
 
 const Spoint = () => {
   // <<<<<<<<<<<<<< STATE VARIABLES >>>>>>>>>>>>>>>
 
   // Page
   const [page, setPage] = useState('test');
+  const [subPage, setSubPage] = useState('home');
   // General User
   const [userInfo, setUserInfo] = useState({
     email: null,
@@ -416,14 +418,10 @@ const Spoint = () => {
       )}
       {/* <<<<<<<<<<<<< TEST AREA >>>>>>>>>>>>>> */}
       {page === 'test' && (
-        <PerformerCard
-          name="Martin Tourret"
-          category="Singer"
-          genre="pop music"
-          price_per_hour={230.5}
-          profile_pic_url={
-            'https://media-exp1.licdn.com/dms/image/C5603AQEVQ6n3joIo2g/profile-displayphoto-shrink_800_800/0/1572341491806?e=1613606400&v=beta&t=yW7NoJxV44vqj7MOMNJmiH-dlbFIKcgJjbYMgeIfImQ'
-          }
+        <AppBar
+          selectedPage={subPage}
+          handleHomeSelected={() => setSubPage('home')}
+          handleProfileSelected={() => setSubPage('profile')}
         />
       )}
     </div>
