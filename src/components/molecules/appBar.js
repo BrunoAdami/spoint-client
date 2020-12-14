@@ -14,12 +14,13 @@ const AppBar = (props) => {
         width: '100%',
         height: '10vh',
         //backgroundColor: Colors.PRIMARY,
-        position: 'absolute',
+        position: 'fixed',
         bottom: 0,
         zIndex: 1,
         display: 'flex',
         justifyContent: 'space-evenly',
         alignItems: 'center',
+        backgroundColor: Colors.SECONDARY,
       }}
     >
       <IconButton onClick={props.handleHomeSelected}>

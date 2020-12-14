@@ -8,8 +8,7 @@ import Modal from '../components/molecules/modal';
 import EnterEmail from '../components/organisms/enterEmail';
 import SignUpPerfomer from '../components/organisms/singUpPerformer';
 import SignUpCustomer from '../components/organisms/singUpCustomer';
-import PerformerCard from '../components/molecules/performerCard';
-import AppBar from '../components/molecules/appBar';
+import AppCustomer from '../components/organisms/appCustomer';
 
 const Spoint = () => {
   // <<<<<<<<<<<<<< STATE VARIABLES >>>>>>>>>>>>>>>
@@ -417,13 +416,7 @@ const Spoint = () => {
         />
       )}
       {/* <<<<<<<<<<<<< TEST AREA >>>>>>>>>>>>>> */}
-      {page === 'test' && (
-        <AppBar
-          selectedPage={subPage}
-          handleHomeSelected={() => setSubPage('home')}
-          handleProfileSelected={() => setSubPage('profile')}
-        />
-      )}
+      {page === 'test' && <AppCustomer />}
     </div>
   );
 };
