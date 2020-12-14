@@ -6,3 +6,9 @@ export const Colors = {
 };
 
 export const TEXT_FONT = 'Poppins';
+
+export const CATEGORIES = [
+  { value: 'Singer', name: 'Singer' },
+  { value: 'Band', name: 'Band' },
+  { value: 'Stand-up comedy', name: 'Stand-up comedy' },
+];

@@ -36,7 +36,7 @@ const SpointAutocomplete = (props) => {
       id="combo-box-demo"
       options={props.options}
       getOptionLabel={(option) => option.name}
-      style={{ width: '100%', maxWidth: 400, color: 'white important!' }}
+      style={{ width: '100%', maxWidth: 400, color: 'white important!', ...props.style }}
       onChange={props.handleOptionSelected}
       value={props.value}
       renderInput={(params) => (

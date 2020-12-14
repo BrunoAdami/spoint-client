@@ -10,6 +10,7 @@ import { ITALIAN_CITIES } from '../../../istat-cities.json';
 import ProfilePicIcon from '../../atoms/profilePicIcon';
 import Loader from '../../atoms/loader';
 import Modal from '../../molecules/modal';
+import { CATEGORIES as PERFORMERS_CATEGORIES } from '../../../config';
 
 const SignUpPerformer = (props) => {
   // STATE VARIABLES
@@ -17,11 +18,7 @@ const SignUpPerformer = (props) => {
   const [welcomeModal, setWelcomeModal] = useState(false);
   // DATA VARIABLES
   const MUSIC_GENRES = useRef(GENRES.map((item) => ({ value: item, name: item })));
-  const CATEGORIES = useRef([
-    { value: 'Singer', name: 'Singer' },
-    { value: 'Band', name: 'Band' },
-    { value: 'Stand-up comedy', name: 'Stand-up comedy' },
-  ]);
+  const CATEGORIES = useRef(PERFORMERS_CATEGORIES);
   const ITALY_CITIES = useRef(ITALIAN_CITIES.map((item) => ({ value: item, name: item })));
   // other
   const NotLoadingOrSuccessOrError = !props.loading && !props.success && !props.error;
