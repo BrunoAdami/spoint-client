@@ -32,96 +32,160 @@ const AppCustomer = (props) => {
   return (
     <div
       style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        height: 'auto',
-        alignItems: 'center',
-        backgroundColor: Colors.SECONDARY,
+        height: '100%',
       }}
     >
       <Header />
-      <CustomModal
-        title={'Filters'}
-        open={openFilter}
-        buttonText={'APPLY'}
-        handleClose={() => {
-          setOpenFilter(false);
-        }}
-      >
-        <Autocomplete
-          options={CATEGORIES.current}
-          handleOptionSelected={props.handleCategorySelected}
-          label={'CATEGORY'}
-          value={props.categoryValue}
-          style={{ maxWidth: 'inherit' }}
-        />
-        {/* {((props.categoryValue && props.categoryValue.value === 'Singer') ||
-          (props.categoryValue && props.categoryValue.value === 'Band')) && ( */}
-        <Autocomplete
-          options={MUSIC_GENRES.current}
-          handleOptionSelected={props.handleGenreSelected}
-          label={'GENRE'}
-          value={props.genreValue}
-          style={{ marginTop: 20, maxWidth: 'inherit' }}
-        />
-        {/* )} */}
-        <Input
-          style={{ marginTop: 20, maxWidth: 'inherit' }}
-          handleInputTyped={() => console.log('type')}
-          placeholder={'Minimum Price €'}
-          type="number"
-        />
-        <Input
-          style={{ marginTop: 20, maxWidth: 'inherit' }}
-          handleInputTyped={() => console.log('type')}
-          placeholder={'Maximum Price €'}
-          type="number"
-        />
-      </CustomModal>
-      <div
-        style={{
-          padding: 20,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          paddingTop: '8vh',
-          paddingBottom: '10vh',
-        }}
-      >
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-evenly',
-            alignItems: 'center',
-            padding: '20px',
-            width: '100%',
-          }}
-        >
-          <div style={{ fontWeight: 'bold', fontSize: 'large' }}>PERFORMERS FOUND</div>
-          <Button style={{ width: isDesktopMode ? '10vw' : '21vw' }} onClick={() => setOpenFilter(true)}>
-            <TuneIcon />
-          </Button>
-        </div>
-        <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexWrap: 'wrap' }}>
-          {Performers.map((performer) => (
-            <div style={{ margin: 20 }}>
-              <PerformerCard
-                name={performer.name}
-                category={performer.category}
-                genre={performer.genre}
-                price_per_hour={performer.cost_per_hour}
-                profile_pic_url={performer.profile_pic_url}
-              />
-            </div>
-          ))}
-        </div>
-      </div>
       <AppBar
         selectedPage={'home'}
         handleHomeSelected={() => console.log('click')}
         handleProfileSelected={() => console.log('click')}
       />
+
+      {/* <<<<<<<<<<<<<< FILTER PERFORMERS >>>>>>>>>>>>>> */}
+
+      {true && (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            height: 'auto',
+            alignItems: 'center',
+            backgroundColor: Colors.SECONDARY,
+          }}
+        >
+          <CustomModal
+            title={'Filters'}
+            open={openFilter}
+            buttonText={'APPLY'}
+            handleClose={() => {
+              setOpenFilter(false);
+            }}
+          >
+            <Autocomplete
+              options={ITALY_CITIES.current}
+              handleOptionSelected={props.handleSearchCitySelected}
+              label={'CITY'}
+              value={props.searchCityValue}
+              style={{ maxWidth: 'inherit' }}
+            />
+            <Autocomplete
+              options={CATEGORIES.current}
+              handleOptionSelected={props.handleCategorySelected}
+              label={'CATEGORY'}
+              value={props.categoryValue}
+              style={{ marginTop: 20, maxWidth: 'inherit' }}
+            />
+            {/* {((props.categoryValue && props.categoryValue.value === 'Singer') ||
+          (props.categoryValue && props.categoryValue.value === 'Band')) && ( */}
+            <Autocomplete
+              options={MUSIC_GENRES.current}
+              handleOptionSelected={props.handleGenreSelected}
+              label={'GENRE'}
+              value={props.genreValue}
+              style={{ marginTop: 20, maxWidth: 'inherit' }}
+            />
+            {/* )} */}
+            <Input
+              style={{ marginTop: 20, maxWidth: 'inherit' }}
+              handleInputTyped={() => console.log('type')}
+              placeholder={'Minimum Price €'}
+              type="number"
+            />
+            <Input
+              style={{ marginTop: 20, maxWidth: 'inherit' }}
+              handleInputTyped={() => console.log('type')}
+              placeholder={'Maximum Price €'}
+              type="number"
+            />
+          </CustomModal>
+          <div
+            style={{
+              padding: 20,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              paddingTop: '8vh',
+              paddingBottom: '10vh',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
+                padding: '20px',
+                width: '100%',
+              }}
+            >
+              <div style={{ fontWeight: 'bold', fontSize: 'large' }}>PERFORMERS FOUND</div>
+              <Button style={{ width: isDesktopMode ? '10vw' : '21vw' }} onClick={() => setOpenFilter(true)}>
+                <TuneIcon />
+              </Button>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexWrap: 'wrap' }}>
+              {Performers.map((performer) => (
+                <div style={{ margin: 20 }}>
+                  <PerformerCard
+                    name={performer.name}
+                    category={performer.category}
+                    genre={performer.genre}
+                    price_per_hour={performer.cost_per_hour}
+                    profile_pic_url={performer.profile_pic_url}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* <<<<<<<<<<<<<< SEARCH FOR PERFORMER >>>>>>>>>>>>>> */}
+
+      {false && (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+            paddingTop: '8vh',
+            paddingBottom: '10vh',
+          }}
+        >
+          <div style={{ fontSize: 'xx-large', marginBottom: 20 }}>FIND YOUR PERFORMER</div>
+          <Autocomplete
+            options={ITALY_CITIES.current}
+            handleOptionSelected={props.handleSearchCitySelected}
+            label={'CITY'}
+            value={props.searchCityValue}
+            style={{ marginBottom: 40 }}
+          />
+          <Button style={{ marginBottom: '10vh' }} onClick={() => console.log('SUBMIT SEARCH')}>
+            GO!
+          </Button>
+        </div>
+      )}
+
+      {/* <<<<<<<<<<<<<<<< LOADING SCREEN >>>>>>>>>>>>>>>>> */}
+
+      {false && (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            flexDirection: 'column',
+            width: '100%',
+            height: '100%',
+            justifyContent: 'center',
+          }}
+        >
+          <Loader style={{ height: '48px', margin: '20px' }} />
+          <text style={{ fontSize: 'xx-large', fontWeight: 'bold', marginBottom: '8vh' }}>{'LOADING...'}</text>
+        </div>
+      )}
     </div>
   );
 };
