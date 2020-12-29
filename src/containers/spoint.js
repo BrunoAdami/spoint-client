@@ -8,12 +8,14 @@ import Modal from '../components/molecules/modal';
 import EnterEmail from '../components/organisms/enterEmail';
 import SignUpPerfomer from '../components/organisms/singUpPerformer';
 import SignUpCustomer from '../components/organisms/singUpCustomer';
+import AppCustomer from '../components/organisms/appCustomer';
 
 const Spoint = () => {
   // <<<<<<<<<<<<<< STATE VARIABLES >>>>>>>>>>>>>>>
 
   // Page
   const [page, setPage] = useState('home');
+  const [subPage, setSubPage] = useState('home');
   // General User
   const [userInfo, setUserInfo] = useState({
     email: null,
@@ -413,6 +415,8 @@ const Spoint = () => {
           error={customerRegistration.error}
         />
       )}
+      {/* <<<<<<<<<<<<< TEST AREA >>>>>>>>>>>>>> */}
+      {page === 'test' && <AppCustomer />}
     </div>
   );
 };
