@@ -22,13 +22,38 @@ const AppCustomer = (props) => {
   // STATE VARIABLES
   const [step, setStep] = useState(0);
   const [openFilter, setOpenFilter] = useState(false);
+  const [openSendOffer, setOpenSendOffer] = useState(false);
+  const [performerSelected, setPerformerSelected] = useState({
+    email: null,
+    name: '',
+    category: null,
+    genre: null,
+    cost_per_hour: null,
+    profile_pic_url: null,
+  });
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
   // DATA VARIABLES
   const MUSIC_GENRES = useRef(GENRES.map((item) => ({ value: item, name: item })));
   const CATEGORIES = useRef(PERFORMERS_CATEGORIES);
   const ITALY_CITIES = useRef(ITALIAN_CITIES.map((item) => ({ value: item, name: item })));
-  // other
+  // other variables
   const NotLoadingOrSuccessOrError = !props.loading && !props.success && !props.error;
   const isDesktopMode = window.innerWidth > 500 ? true : false;
+  // methods
+  const handleUpdateDate = (event) => {
+    const { value } = event.target;
+    const date = value.split('T')[0].split('-');
+    const year = date[0];
+    const month = date[1];
+    const day = date[2];
+    const time = value.split('T')[1].split(':');
+    const hours = time[0];
+    const minutes = time[1];
+    console.log(year, month, '-', day, '-', hours, '-', minutes);
+    setStartTime(new Date(year, month, day, hours, minutes));
+    console.log(startTime);
+  };
   return (
     <div
       style={{
@@ -55,6 +80,8 @@ const AppCustomer = (props) => {
             backgroundColor: Colors.SECONDARY,
           }}
         >
+          {/* FILTERS MODAL */}
+
           <CustomModal
             title={'Filters'}
             open={openFilter}
@@ -68,7 +95,7 @@ const AppCustomer = (props) => {
               handleOptionSelected={props.handleSearchCitySelected}
               label={'CITY'}
               value={props.searchCityValue}
-              style={{ maxWidth: 'inherit' }}
+              style={{ marginTop: 20, maxWidth: 'inherit' }}
             />
             <Autocomplete
               options={CATEGORIES.current}
@@ -100,6 +127,45 @@ const AppCustomer = (props) => {
               type="number"
             />
           </CustomModal>
+
+          {/* SEND OFFER MODAL */}
+
+          <CustomModal
+            title={'Send Job Offer'}
+            open={openSendOffer}
+            buttonText={`SEND TO ${performerSelected.name.split(' ')[0]}`}
+            handleClose={() => {
+              setOpenSendOffer(false);
+            }}
+          >
+            <div style={{ textAlign: 'center', fontSize: 'larger', fontWeight: 'bold' }}>{performerSelected.name}</div>
+            <Input
+              style={{ marginTop: 20, maxWidth: 'inherit' }}
+              handleInputTyped={(event) => handleUpdateDate(event)}
+              placeholder={'Starts at'}
+              type="datetime-local"
+            />
+            <Input
+              style={{ marginTop: 20, maxWidth: 'inherit' }}
+              handleInputTyped={() => console.log('type')}
+              placeholder={'Ends at'}
+              type="datatime-local"
+            />
+            <Input
+              style={{ marginTop: 20, maxWidth: 'inherit' }}
+              handleInputTyped={() => console.log('type')}
+              placeholder={`Address`}
+            />
+            <Input
+              style={{ marginTop: 20, maxWidth: 'inherit' }}
+              handleInputTyped={() => console.log('type')}
+              placeholder={`Address`}
+            />
+            <div style={{ textAlign: 'center', fontSize: 'larger', fontWeight: 'bold' }}>{performerSelected.name}</div>
+          </CustomModal>
+
+          {/* SEARCH RESULT PAGE */}
+
           <div
             style={{
               padding: 20,
@@ -133,6 +199,10 @@ const AppCustomer = (props) => {
                     genre={performer.genre}
                     price_per_hour={performer.cost_per_hour}
                     profile_pic_url={performer.profile_pic_url}
+                    handleCardClick={() => {
+                      setPerformerSelected(performer);
+                      setOpenSendOffer(true);
+                    }}
                   />
                 </div>
               ))}

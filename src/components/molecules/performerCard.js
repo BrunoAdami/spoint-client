@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: Colors.INPUT_BACKGROUND,
     color: Colors.SECONDARY,
     height: desktopMode ? '17vh' : '25vh',
+    cursor: 'pointer',
   },
   details: {
     display: 'flex',
@@ -46,7 +47,7 @@ const PerformerCard = (props) => {
   const classes = useStyles();
 
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} onClick={props.handleCardClick}>
       <div className={classes.details}>
         <CardContent className={classes.content}>
           <div style={{ fontSize: 'small', fontWeight: 'bold' }}>{props.name}</div>
@@ -66,7 +67,7 @@ const PerformerCard = (props) => {
 
 export default PerformerCard;
 
-const { string, number } = PropTypes;
+const { string, number, func } = PropTypes;
 
 PerformerCard.propTypes = {
   name: string.isRequired,
@@ -74,4 +75,5 @@ PerformerCard.propTypes = {
   genre: string,
   price_per_hour: number.isRequired,
   profile_pic_url: string.isRequired,
+  handleCardClick: func.isRequired,
 };
