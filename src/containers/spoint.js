@@ -14,7 +14,7 @@ const Spoint = () => {
   // <<<<<<<<<<<<<< STATE VARIABLES >>>>>>>>>>>>>>>
 
   // Page
-  const [page, setPage] = useState('home');
+  const [page, setPage] = useState('test');
   const [subPage, setSubPage] = useState('home');
   // General User
   const [userInfo, setUserInfo] = useState({

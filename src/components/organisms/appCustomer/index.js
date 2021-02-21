@@ -17,10 +17,14 @@ import Autocomplete from '../../atoms/autocomplete';
 import { CATEGORIES as PERFORMERS_CATEGORIES } from '../../../config';
 import GENRES from '../../../genres.json';
 import { ITALIAN_CITIES } from '../../../istat-cities.json';
+import { findAllByDisplayValue } from '@testing-library/react';
 
 const AppCustomer = (props) => {
   // STATE VARIABLES
   const [step, setStep] = useState(0);
+  const [page, setPage] = useState('home'); // pages are "home" or "offers" or "profile"
+  const [loading, setLoading] = useState(false);
+  // for search page
   const [openFilter, setOpenFilter] = useState(false);
   const [openSendOffer, setOpenSendOffer] = useState(false);
   const [performerSelected, setPerformerSelected] = useState({
@@ -31,8 +35,29 @@ const AppCustomer = (props) => {
     cost_per_hour: null,
     profile_pic_url: null,
   });
+  const [performers, setPerformers] = useState(null);
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
+  // for profile page
+  const [customerInfo, setCustomerInfo] = useState({
+    name: '',
+    score: null,
+    profile_pic_url: null,
+    address: null,
+    fiscal_code: null,
+  });
+  const [jobOffers, setJobOffers] = useState([
+    {
+      title: null,
+      start_time: null,
+      end_time: null,
+      date: null,
+      address: null,
+      performerName: null,
+      performerPicUrl: null,
+      status: null,
+    },
+  ]);
   // DATA VARIABLES
   const MUSIC_GENRES = useRef(GENRES.map((item) => ({ value: item, name: item })));
   const CATEGORIES = useRef(PERFORMERS_CATEGORIES);
@@ -40,7 +65,9 @@ const AppCustomer = (props) => {
   // other variables
   const NotLoadingOrSuccessOrError = !props.loading && !props.success && !props.error;
   const isDesktopMode = window.innerWidth > 500 ? true : false;
-  // methods
+
+  // METHODS
+
   const handleUpdateDate = (event) => {
     const { value } = event.target;
     const date = value.split('T')[0].split('-');
@@ -54,6 +81,11 @@ const AppCustomer = (props) => {
     setStartTime(new Date(year, month, day, hours, minutes));
     console.log(startTime);
   };
+
+  const getPerformers = () => {
+    setPerformers(Performers);
+  };
+
   return (
     <div
       style={{
@@ -62,14 +94,17 @@ const AppCustomer = (props) => {
     >
       <Header />
       <AppBar
-        selectedPage={'home'}
-        handleHomeSelected={() => console.log('click')}
-        handleProfileSelected={() => console.log('click')}
+        selectedPage={page}
+        handleHomeSelected={() => setPage('home')}
+        handleProfileSelected={() => setPage('profile')}
+        handleOffersSelected={() => setPage('offers')}
       />
+
+      {/* ############## HOME ############## */}
 
       {/* <<<<<<<<<<<<<< FILTER PERFORMERS >>>>>>>>>>>>>> */}
 
-      {true && (
+      {performers && page === 'home' && !loading && (
         <div
           style={{
             display: 'flex',
@@ -161,7 +196,6 @@ const AppCustomer = (props) => {
               handleInputTyped={() => console.log('type')}
               placeholder={`Address`}
             />
-            <div style={{ textAlign: 'center', fontSize: 'larger', fontWeight: 'bold' }}>{performerSelected.name}</div>
           </CustomModal>
 
           {/* SEARCH RESULT PAGE */}
@@ -191,7 +225,7 @@ const AppCustomer = (props) => {
               </Button>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexWrap: 'wrap' }}>
-              {Performers.map((performer) => (
+              {performers.map((performer) => (
                 <div style={{ margin: 20 }}>
                   <PerformerCard
                     name={performer.name}
@@ -213,7 +247,7 @@ const AppCustomer = (props) => {
 
       {/* <<<<<<<<<<<<<< SEARCH FOR PERFORMER >>>>>>>>>>>>>> */}
 
-      {false && (
+      {!performers && page === 'home' && !loading && (
         <div
           style={{
             display: 'flex',
@@ -221,8 +255,6 @@ const AppCustomer = (props) => {
             justifyContent: 'center',
             alignItems: 'center',
             height: '100%',
-            paddingTop: '8vh',
-            paddingBottom: '10vh',
           }}
         >
           <div style={{ fontSize: 'xx-large', marginBottom: 20 }}>FIND YOUR PERFORMER</div>
@@ -233,15 +265,50 @@ const AppCustomer = (props) => {
             value={props.searchCityValue}
             style={{ marginBottom: 40 }}
           />
-          <Button style={{ marginBottom: '10vh' }} onClick={() => console.log('SUBMIT SEARCH')}>
+          <Button style={{ marginBottom: '10vh' }} onClick={() => getPerformers()}>
             GO!
           </Button>
         </div>
       )}
 
+      {/* ############## OFFERS ############## */}
+
+      {/* ############## PROFILE ############## */}
+
+      {page === 'profile' && !loading && (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: '100%',
+            paddingBottom: '10vh',
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
+            <img
+              src="https://miro.medium.com/max/1838/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
+              alt="Customer profile"
+              style={{ height: '18vh', borderRadius: '50%', width: '18vh', objectFit: 'cover' }}
+            />
+            <text style={{ margin: '2vh', fontWeight: 900, fontSize: 'xx-large' }}>Yoda</text>
+            <text style={{ marginBottom: '0.5vh', fontSize: 'large' }}>
+              Score: <strong>3.5 stars</strong>
+            </text>
+            <text style={{ marginBottom: '0.5vh', fontSize: 'large' }}>
+              Address: <strong>Street XXXX XXXX</strong>
+            </text>
+            <text style={{ marginBottom: '0.5vh', fontSize: 'large' }}>
+              Fiscal code: <strong>XXXXXXXXX</strong>
+            </text>
+          </div>
+        </div>
+      )}
+
       {/* <<<<<<<<<<<<<<<< LOADING SCREEN >>>>>>>>>>>>>>>>> */}
 
-      {false && (
+      {loading && (
         <div
           style={{
             display: 'flex',

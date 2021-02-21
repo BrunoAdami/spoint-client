@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { IconButton } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
+import NoteIcon from '@material-ui/icons/Note';
 
 const desktopMode = window.innerWidth > 500;
 
@@ -29,6 +30,12 @@ const AppBar = (props) => {
           fontSize="large"
         />
       </IconButton>
+      <IconButton onClick={props.handleOffersSelected}>
+        <NoteIcon
+          style={{ color: props.selectedPage === 'offers' ? Colors.PRIMARY : Colors.INPUT_BACKGROUND }}
+          fontSize="large"
+        />
+      </IconButton>
       <IconButton onClick={props.handleProfileSelected}>
         <PersonIcon
           style={{ color: props.selectedPage === 'profile' ? Colors.PRIMARY : Colors.INPUT_BACKGROUND }}
@@ -47,4 +54,5 @@ AppBar.propTypes = {
   selectedPage: string.isRequired,
   handleHomeSelected: func.isRequired,
   handleProfileSelected: func.isRequired,
+  handleOffersSelected: func.isRequired,
 };
