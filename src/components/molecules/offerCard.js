@@ -21,10 +21,10 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    width: desktopMode ? '12vw' : '50vw',
+    width: '100%',
   },
   content: {
-    flex: '1 0 auto',
+    height: '100%',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'flex-start',
@@ -38,7 +38,6 @@ const useStyles = makeStyles((theme) => ({
     textAlign: 'center',
     justifyContent: 'center',
     width: '100%',
-    backgroundColor: Colors.PRIMARY,
     color: 'white',
   },
 }));
@@ -50,30 +49,61 @@ const PerformerCard = (props) => {
     <Card className={classes.root} onClick={props.handleCardClick}>
       <div className={classes.details}>
         <CardContent className={classes.content}>
-          <div style={{ fontSize: 'small', fontWeight: 'bold' }}>{props.name}</div>
-          <div style={{ color: '#414046', fontSize: 'x-small', fontWeight: 'bold' }}>{props.category}</div>
-          {props.genre && (
-            <div style={{ color: '#414046', fontSize: 'x-small', fontStyle: 'italic' }}>{props.genre}</div>
-          )}
+          <div style={{ fontSize: 'larger', fontWeight: 'bold' }}>{props.title}</div>
+          <div
+            style={{ color: '#414046', fontSize: 'medium', fontWeight: 'bold' }}
+          >{`Start time: ${props.startTime}`}</div>
+          <div
+            style={{ color: '#414046', fontSize: 'medium', fontWeight: 'bold' }}
+          >{`Duration: ${props.duration}`}</div>
         </CardContent>
-        <div className={classes.price}>
-          <div style={{ fontSize: 'medium' }}>{props.price_per_hour} €/h</div>
-        </div>
+        {!props.isPerformer && (
+          <div
+            className={classes.price}
+            style={{
+              backgroundColor:
+                props.status === 'accepted'
+                  ? '#32a852'
+                  : props.status === 'waiting'
+                  ? '#a86d32'
+                  : props.status === 'rejected'
+                  ? '#a83a32'
+                  : '#a83a32',
+            }}
+          >
+            <div style={{ fontSize: 'x-large' }}>{props.status}</div>
+          </div>
+        )}
+        {props.isPerformer && (
+          <div
+            className={classes.price}
+            style={{
+              backgroundColor: Colors.PRIMARY,
+            }}
+          >
+            <div style={{ fontSize: 'x-large' }}>{`${props.offerValue} €`}</div>
+          </div>
+        )}
       </div>
-      <CardMedia className={classes.cover} image={props.profile_pic_url} title="Live from space album cover" />
     </Card>
   );
 };
 
 export default PerformerCard;
 
-const { string, number, func } = PropTypes;
+const { string, number, func, any, bool } = PropTypes;
 
 PerformerCard.propTypes = {
-  name: string.isRequired,
-  category: string.isRequired,
-  genre: string,
-  price_per_hour: number.isRequired,
-  profile_pic_url: string.isRequired,
-  handleCardClick: func.isRequired,
+  title: string.isRequired,
+  startTime: any.isRequired,
+  duration: any.isRequired,
+  status: any,
+  isPerformer: bool,
+  offerValue: number,
+};
+
+PerformerCard.defaultProps = {
+  isPerformer: false,
+  offerValue: null,
+  status: null,
 };

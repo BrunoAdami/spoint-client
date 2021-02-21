@@ -152,3 +152,42 @@ export const Performers = [
     profile_pic_url: 'https://atlantablackstar.com/wp-content/uploads/2013/09/Arlenis-Sosa-Pe%C3%B1a-2.jpg',
   },
 ];
+
+export const OFFERS = [
+  {
+    title: 'The best event',
+    startTime: '27 june 12h AM',
+    duration: '6h',
+    status: 'accepted',
+  },
+  {
+    title: 'The best event',
+    startTime: '27 june 12h AM',
+    duration: '6h',
+    status: 'rejected',
+  },
+  {
+    title: 'The best event',
+    startTime: '27 june 12h AM',
+    duration: '6h',
+    status: 'waiting',
+  },
+  {
+    title: 'The best event',
+    startTime: '27 june 12h AM',
+    duration: '6h',
+    status: 'waiting',
+  },
+  {
+    title: 'The best event',
+    startTime: '27 june 12h AM',
+    duration: '6h',
+    status: 'rejected',
+  },
+  {
+    title: 'The best event',
+    startTime: '27 june 12h AM',
+    duration: '6h',
+    status: 'accepted',
+  },
+];

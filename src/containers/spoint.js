@@ -9,6 +9,7 @@ import EnterEmail from '../components/organisms/enterEmail';
 import SignUpPerfomer from '../components/organisms/singUpPerformer';
 import SignUpCustomer from '../components/organisms/singUpCustomer';
 import AppCustomer from '../components/organisms/appCustomer';
+import AppPerformer from '../components/organisms/appPerformer';
 
 const Spoint = () => {
   // <<<<<<<<<<<<<< STATE VARIABLES >>>>>>>>>>>>>>>
@@ -416,7 +417,8 @@ const Spoint = () => {
         />
       )}
       {/* <<<<<<<<<<<<< TEST AREA >>>>>>>>>>>>>> */}
-      {page === 'test' && <AppCustomer />}
+      {false && <AppCustomer />}
+      {page === 'test' && <AppPerformer />}
     </div>
   );
 };

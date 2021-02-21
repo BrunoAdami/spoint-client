@@ -9,7 +9,7 @@ import Modal from '../../molecules/modal';
 import Header from '../../molecules/header';
 import AppBar from '../../molecules/appBar';
 import { Colors } from '../../../config';
-import { Performers } from '../../../mock-data';
+import { Performers, OFFERS } from '../../../mock-data';
 import PerformerCard from '../../molecules/performerCard';
 import CustomModal from '../../molecules/customModal';
 import TuneIcon from '@material-ui/icons/Tune';
@@ -18,6 +18,7 @@ import { CATEGORIES as PERFORMERS_CATEGORIES } from '../../../config';
 import GENRES from '../../../genres.json';
 import { ITALIAN_CITIES } from '../../../istat-cities.json';
 import { findAllByDisplayValue } from '@testing-library/react';
+import OfferCard from '../../molecules/offerCard';
 
 const AppCustomer = (props) => {
   // STATE VARIABLES
@@ -272,6 +273,49 @@ const AppCustomer = (props) => {
       )}
 
       {/* ############## OFFERS ############## */}
+
+      {page === 'offers' && !loading && (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            height: 'auto',
+            alignItems: 'center',
+            backgroundColor: Colors.SECONDARY,
+          }}
+        >
+          <div
+            style={{
+              padding: 20,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              paddingTop: '8vh',
+              paddingBottom: '10vh',
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                padding: '20px',
+                width: '100%',
+              }}
+            >
+              <div style={{ fontWeight: 'bold', fontSize: 'large' }}>JOB OFFERS</div>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexWrap: 'wrap' }}>
+              {OFFERS.map((offer) => (
+                <div style={{ margin: 20 }}>
+                  <OfferCard {...offer} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ############## PROFILE ############## */}
 
