@@ -111,7 +111,7 @@ const AppPerformer = (props) => {
             <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexWrap: 'wrap' }}>
               {OFFERS.map((offer) => (
                 <div style={{ margin: 20 }}>
-                  <OfferCard {...offer} isPerformer={true} offerValue={200} />
+                  <OfferCard {...offer} isPerformer offerValue={200} />
                 </div>
               ))}
             </div>
@@ -129,7 +129,6 @@ const AppPerformer = (props) => {
             justifyContent: 'center',
             alignItems: 'center',
             height: '100%',
-            paddingBottom: '10vh',
           }}
         >
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>

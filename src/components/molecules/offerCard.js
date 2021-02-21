@@ -14,7 +14,6 @@ const useStyles = makeStyles((theme) => ({
     width: desktopMode ? '20vw' : '80vw',
     backgroundColor: Colors.INPUT_BACKGROUND,
     color: Colors.SECONDARY,
-    height: desktopMode ? '17vh' : '25vh',
     cursor: 'pointer',
   },
   details: {

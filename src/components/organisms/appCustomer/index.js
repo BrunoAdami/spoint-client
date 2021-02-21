@@ -327,7 +327,6 @@ const AppCustomer = (props) => {
             justifyContent: 'center',
             alignItems: 'center',
             height: '100%',
-            paddingBottom: '10vh',
           }}
         >
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>

@@ -15,7 +15,7 @@ const Spoint = () => {
   // <<<<<<<<<<<<<< STATE VARIABLES >>>>>>>>>>>>>>>
 
   // Page
-  const [page, setPage] = useState('test');
+  const [page, setPage] = useState('customer');
   const [subPage, setSubPage] = useState('home');
   // General User
   const [userInfo, setUserInfo] = useState({
@@ -416,9 +416,12 @@ const Spoint = () => {
           error={customerRegistration.error}
         />
       )}
-      {/* <<<<<<<<<<<<< TEST AREA >>>>>>>>>>>>>> */}
-      {false && <AppCustomer />}
-      {page === 'test' && <AppPerformer />}
+
+      {/* <<<<<<<<<<<<< CUSTOMER APP >>>>>>>>>>>>>> */}
+      {page === 'customer' && <AppCustomer />}
+
+      {/* <<<<<<<<<<<<< PERFORMER APP >>>>>>>>>>>>>> */}
+      {page === 'performer' && <AppPerformer />}
     </div>
   );
 };
