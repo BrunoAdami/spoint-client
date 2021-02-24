@@ -37,6 +37,18 @@ const AppPerformer = (props) => {
       status: null,
     },
   ]);
+  const [openOfferModal, setOpenOfferModal] = useState(false);
+  const [selectedOffer, setSelectedOffer] = useState({
+    id: null,
+    title: null,
+    startTime: null,
+    endTime: null,
+    address: null,
+    status: null,
+    price_per_hour: null,
+    customerName: null,
+    performerName: null,
+  });
   // DATA VARIABLES
   const ITALY_CITIES = useRef(ITALIAN_CITIES.map((item) => ({ value: item, name: item })));
   // other variables
@@ -97,13 +109,51 @@ const AppPerformer = (props) => {
             <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexWrap: 'wrap' }}>
               {props.jobs.map((offer) => (
                 <div style={{ margin: 20 }}>
-                  <OfferCard {...offer} isPerformer offerValue={200} />
+                  <OfferCard
+                    title={offer.title}
+                    startTime={offer.start_time}
+                    endTime={offer.end_time}
+                    id={offer.id}
+                    status={offer.status}
+                    customerName={offer.customerName}
+                    performerName={offer.performerName}
+                    address={offer.address}
+                    isPerformer
+                    offerValue={offer.price_per_hour}
+                    handleCardClick={() => {
+                      setSelectedOffer(offer);
+                      console.log(selectedOffer);
+                      setOpenOfferModal(true);
+                    }}
+                  />
                 </div>
               ))}
             </div>
           </div>
         </div>
       )}
+
+      {/* ############## RESPOND TO OFFER ############## */}
+
+      <CustomModal
+        title={'Do you want that job?'}
+        open={openOfferModal}
+        buttonText={'ACCEPT'}
+        buttonText2={'REJECT'}
+        isAcceptOfferCustomModal
+        handleClose={() => {
+          console.log('accept Job');
+          props.jobs.find((offer) => offer.id === selectedOffer.id).status = 'accepted';
+          setOpenOfferModal(false);
+          // 5 send accepted status to back-end
+        }}
+        handleClose2={() => {
+          console.log('reject job');
+          props.jobs.find((offer) => offer.id === selectedOffer.id).status = 'rejected';
+          setOpenOfferModal(false);
+          //  6 SEND REJECTED STATUS TO BACK-END
+        }}
+      ></CustomModal>
 
       {/* ############## PROFILE ############## */}
 
@@ -161,6 +211,9 @@ const AppPerformer = (props) => {
 const { func, any, bool } = PropTypes;
 
 AppPerformer.propTypes = {
+  id: any.isRequired,
+  email: any.isRequired,
+  password: any.isRequired,
   name: any.isRequired,
   category: any.isRequired,
   genre: any.isRequired,

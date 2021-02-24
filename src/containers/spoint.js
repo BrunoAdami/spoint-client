@@ -47,6 +47,9 @@ const Spoint = () => {
     error: false,
   });
   const [loggedPerformer, setLoggedPerformer] = useState({
+    id: null,
+    email: null,
+    password: null,
     name: null,
     category: null,
     genre: null,
@@ -79,6 +82,9 @@ const Spoint = () => {
     error: false,
   });
   const [loggedCustomer, setLoggedCustomer] = useState({
+    id: null,
+    email: null,
+    password: null,
     name: null,
     profile_pic_url: null,
     score: null,
@@ -174,6 +180,9 @@ const Spoint = () => {
     // 3 SEND REQUESTO TO BACK TO MAKE LOGIN
     // SAVE RESPONSE ON LOGGED PERFORMER OR LOGGED CUSTOMER (only the performer has the "category" attribute)
     setLoggedCustomer({
+      id: 1,
+      email: 'testemail@gmail.com',
+      password: 'testpassword',
       name: 'Customer test',
       profile_pic_url:
         'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTB8fHBlcnNvbnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
@@ -183,6 +192,9 @@ const Spoint = () => {
       jobs: OFFERS,
     });
     setLoggedPerformer({
+      id: 2,
+      email: 'testemail@gmail.com',
+      password: 'testpassword',
       name: 'Performer test',
       category: 'Test category',
       genre: 'Test genre',
@@ -197,7 +209,7 @@ const Spoint = () => {
       money: 300,
       jobs: OFFERS,
     });
-    setPage('customer');
+    setPage('performer');
   };
 
   // <<<<<<<<<<<<<<< RETURN FUNCTION >>>>>>>>>>>>>>>
@@ -354,6 +366,7 @@ const Spoint = () => {
           }}
           handleUploadProfilePic={(event) => {
             const file = event.target.files[0];
+            // SEND THAT FILE TO S3
             event.target.value = null;
             const profilePic = new FormData();
             profilePic.append('image', file);
@@ -501,6 +514,9 @@ const Spoint = () => {
       {/* <<<<<<<<<<<<< CUSTOMER APP >>>>>>>>>>>>>> */}
       {page === 'customer' && (
         <AppCustomer
+          id={loggedCustomer.id}
+          email={loggedCustomer.email}
+          password={loggedCustomer.password}
           name={loggedCustomer.name}
           profile_pic_url={loggedCustomer.profile_pic_url}
           score={loggedCustomer.score}
@@ -513,6 +529,9 @@ const Spoint = () => {
       {/* <<<<<<<<<<<<< PERFORMER APP >>>>>>>>>>>>>> */}
       {page === 'performer' && (
         <AppPerformer
+          id={loggedPerformer.id}
+          email={loggedPerformer.email}
+          password={loggedPerformer.password}
           name={loggedPerformer.name}
           category={loggedPerformer.category}
           genre={loggedPerformer.genre}

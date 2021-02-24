@@ -59,6 +59,11 @@ const Modal = (props) => {
           <Button style={{ marginTop: 10 }} onClick={props.handleClose}>
             {props.buttonText}
           </Button>
+          {props.isAcceptOfferCustomModal && (
+            <Button style={{ marginTop: 10, color: '#000000' }} onClick={props.handleClose2}>
+              {props.buttonText2}
+            </Button>
+          )}
         </div>
       </div>
     </StyledDialog>

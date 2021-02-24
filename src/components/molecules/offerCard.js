@@ -48,13 +48,19 @@ const PerformerCard = (props) => {
     <Card className={classes.root} onClick={props.handleCardClick}>
       <div className={classes.details}>
         <CardContent className={classes.content}>
-          <div style={{ fontSize: 'larger', fontWeight: 'bold' }}>{props.title}</div>
+          <div style={{ fontSize: 'larger', fontWeight: 'bold', textAlign: 'start' }}>{props.title}</div>
           <div
-            style={{ color: '#414046', fontSize: 'medium', fontWeight: 'bold' }}
+            style={{ color: '#414046', fontSize: 'medium', fontWeight: 'bold', textAlign: 'start' }}
           >{`Start time: ${props.startTime}`}</div>
           <div
-            style={{ color: '#414046', fontSize: 'medium', fontWeight: 'bold' }}
-          >{`Duration: ${props.duration}`}</div>
+            style={{ color: '#414046', fontSize: 'medium', fontWeight: 'bold', textAlign: 'start' }}
+          >{`End time: ${props.endTime}`}</div>
+          <div
+            style={{ color: '#414046', fontSize: 'medium', fontWeight: 'bold', textAlign: 'start' }}
+          >{`Adress: ${props.address}`}</div>
+          <div style={{ color: '#414046', fontSize: 'medium', fontWeight: 'bold', textAlign: 'start' }}>
+            {props.isPerformer ? `Customer: ${props.customerName}` : `Performer: ${props.performerName}`}
+          </div>
         </CardContent>
         {!props.isPerformer && (
           <div
@@ -63,7 +69,7 @@ const PerformerCard = (props) => {
               backgroundColor:
                 props.status === 'accepted'
                   ? '#32a852'
-                  : props.status === 'waiting'
+                  : props.status === 'pending'
                   ? '#a86d32'
                   : props.status === 'rejected'
                   ? '#a83a32'
@@ -73,14 +79,31 @@ const PerformerCard = (props) => {
             <div style={{ fontSize: 'x-large' }}>{props.status}</div>
           </div>
         )}
-        {props.isPerformer && (
+        {props.isPerformer && (props.status === 'accepted' || props.status === 'rejected') && (
+          <div
+            className={classes.price}
+            style={{
+              backgroundColor:
+                props.status === 'accepted'
+                  ? '#32a852'
+                  : props.status === 'pending'
+                  ? '#a86d32'
+                  : props.status === 'rejected'
+                  ? '#a83a32'
+                  : '#a83a32',
+            }}
+          >
+            <div style={{ fontSize: 'x-large' }}>{props.status}</div>
+          </div>
+        )}
+        {props.isPerformer && props.status !== 'accepted' && props.status !== 'rejected' && (
           <div
             className={classes.price}
             style={{
               backgroundColor: Colors.PRIMARY,
             }}
           >
-            <div style={{ fontSize: 'x-large' }}>{`${props.offerValue} €`}</div>
+            <div style={{ fontSize: 'x-large' }}>{`${props.offerValue} €/h`}</div>
           </div>
         )}
       </div>
@@ -93,9 +116,6 @@ export default PerformerCard;
 const { string, number, func, any, bool } = PropTypes;
 
 PerformerCard.propTypes = {
-  title: string.isRequired,
-  startTime: any.isRequired,
-  duration: any.isRequired,
   status: any,
   isPerformer: bool,
   offerValue: number,

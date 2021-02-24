@@ -29,6 +29,7 @@ const AppCustomer = (props) => {
   const [openFilter, setOpenFilter] = useState(false);
   const [openSendOffer, setOpenSendOffer] = useState(false);
   const [performerSelected, setPerformerSelected] = useState({
+    id: null,
     email: null,
     name: '',
     category: null,
@@ -46,6 +47,22 @@ const AppCustomer = (props) => {
   const [genreFilter, setGenreFilter] = useState(null);
   const [minPrice, setMinPrice] = useState(null);
   const [maxPrice, setMaxPrice] = useState(null);
+  let cityFilterValue = null;
+  let categoryFilterValue = null;
+  let genreFilterValue = null;
+  let minPriceValue = null;
+  let maxPriceValue = null;
+
+  // offer info
+  const [jobTitle, setJobTitle] = useState(null);
+  const [jobStartTime, setJobStartTime] = useState(null);
+  const [jobEndTime, setJobEndTime] = useState(null);
+  const [jobAddress, setJobAddress] = useState(null);
+  let jobTitleValue = null;
+  let jobStartTimeValue = null;
+  let jobEndTimeValue = null;
+  let jobAddressValue = null;
+
   // offers
   const [jobOffers, setJobOffers] = useState([
     {
@@ -103,11 +120,27 @@ const AppCustomer = (props) => {
     setPerformers(Performers);
   };
 
-  let cityFilterValue = null;
-  let categoryFilterValue = null;
-  let genreFilterValue = null;
-  let minPriceValue = null;
-  let maxPriceValue = null;
+  const handleSendOffer = () => {
+    const startDateArray = jobStartTimeValue.split('T')[0].split('-');
+    const startHour = jobStartTimeValue.split('T')[1];
+    const startTime = `${startDateArray[2]}-${startDateArray[1]}-${startDateArray[0]},${startHour}`;
+    const endDateArray = jobEndTimeValue.split('T')[0].split('-');
+    const endHour = jobEndTimeValue.split('T')[1];
+    const endTime = `${endDateArray[2]}-${endDateArray[1]}-${endDateArray[0]},${endHour}`;
+    console.log({
+      email: props.email,
+      password: props.password,
+      performer_id: performerSelected.id,
+      customer_id: props.id,
+      title: jobTitleValue,
+      start_time: startTime,
+      end_time: endTime,
+      address: jobAddressValue,
+      price_per_hour: performerSelected.cost_per_hour,
+    });
+    // 5 SEND OFFER TO BACK END
+    setOpenSendOffer(false);
+  };
 
   return (
     <div
@@ -203,35 +236,38 @@ const AppCustomer = (props) => {
             title={'Send Job Offer'}
             open={openSendOffer}
             buttonText={`SEND TO ${performerSelected.name.split(' ')[0]}`}
-            handleClose={() => {
-              setOpenSendOffer(false);
-            }}
+            handleClose={handleSendOffer}
           >
             <div style={{ textAlign: 'center', fontSize: 'larger', fontWeight: 'bold' }}>{performerSelected.name}</div>
             <Input
               style={{ marginTop: 20, maxWidth: 'inherit' }}
               handleInputTyped={(event) => {
-                console.log(event.target.value);
-                //handleUpdateDate(event);
+                jobTitleValue = event.target.value;
+              }}
+              placeholder={`Title`}
+            />
+            <Input
+              style={{ marginTop: 20, maxWidth: 'inherit' }}
+              handleInputTyped={(event) => {
+                jobAddressValue = event.target.value;
+              }}
+              placeholder={`Address`}
+            />
+            <Input
+              style={{ marginTop: 20, maxWidth: 'inherit' }}
+              handleInputTyped={(event) => {
+                jobStartTimeValue = event.target.value;
               }}
               placeholder={'Starts at'}
               type="datetime-local"
             />
             <Input
               style={{ marginTop: 20, maxWidth: 'inherit' }}
-              handleInputTyped={() => console.log('type')}
+              handleInputTyped={(event) => {
+                jobEndTimeValue = event.target.value;
+              }}
               placeholder={'Ends at'}
               type="datetime-local"
-            />
-            <Input
-              style={{ marginTop: 20, maxWidth: 'inherit' }}
-              handleInputTyped={() => console.log('type')}
-              placeholder={`Address`}
-            />
-            <Input
-              style={{ marginTop: 20, maxWidth: 'inherit' }}
-              handleInputTyped={() => console.log('type')}
-              placeholder={`Address`}
             />
           </CustomModal>
 
@@ -346,7 +382,16 @@ const AppCustomer = (props) => {
             <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexWrap: 'wrap' }}>
               {props.jobs.map((offer) => (
                 <div style={{ margin: 20 }}>
-                  <OfferCard {...offer} />
+                  <OfferCard
+                    title={offer.title}
+                    startTime={offer.start_time}
+                    endTime={offer.end_time}
+                    id={offer.id}
+                    status={offer.status}
+                    customerName={offer.customerName}
+                    performerName={offer.performerName}
+                    address={offer.address}
+                  />
                 </div>
               ))}
             </div>
@@ -410,6 +455,9 @@ const AppCustomer = (props) => {
 const { func, any, bool } = PropTypes;
 
 AppCustomer.propTypes = {
+  id: any.isRequired,
+  email: any.isRequired,
+  password: any.isRequired,
   name: any.isRequired,
   profile_pic_url: any.isRequired,
   score: any.isRequired,
