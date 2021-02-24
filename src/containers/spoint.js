@@ -10,13 +10,14 @@ import SignUpPerfomer from '../components/organisms/singUpPerformer';
 import SignUpCustomer from '../components/organisms/singUpCustomer';
 import AppCustomer from '../components/organisms/appCustomer';
 import AppPerformer from '../components/organisms/appPerformer';
+import Api from '../services/api';
+import { OFFERS } from '../mock-data';
 
 const Spoint = () => {
   // <<<<<<<<<<<<<< STATE VARIABLES >>>>>>>>>>>>>>>
 
   // Page
-  const [page, setPage] = useState('customer');
-  const [subPage, setSubPage] = useState('home');
+  const [page, setPage] = useState('home');
   // General User
   const [userInfo, setUserInfo] = useState({
     email: null,
@@ -45,6 +46,20 @@ const Spoint = () => {
     success: false,
     error: false,
   });
+  const [loggedPerformer, setLoggedPerformer] = useState({
+    name: null,
+    category: null,
+    genre: null,
+    cost_per_hour: null,
+    profile_pic_url: null,
+    birthday: null,
+    score: null,
+    search_city: null,
+    address: null,
+    fiscal_code: null,
+    money: null,
+    jobs: null,
+  });
   // Customer
   const [customerInfo, setCustomerInfo] = useState({
     email: null,
@@ -63,6 +78,14 @@ const Spoint = () => {
     success: false,
     error: false,
   });
+  const [loggedCustomer, setLoggedCustomer] = useState({
+    name: null,
+    profile_pic_url: null,
+    score: null,
+    address: null,
+    fiscal_code: null,
+    jobs: null,
+  });
   // Modals
   const [modalOpen, setModalOpen] = useState({
     welcomeBack: false,
@@ -80,6 +103,103 @@ const Spoint = () => {
     return v;
   };
 
+  const handleSubmitCustomerInfo = () => {
+    setCustomerRegistration({
+      ...customerRegistration,
+      loading: true,
+    });
+    console.log({
+      email: customerInfo.email,
+      password: customerInfo.password,
+      name: customerInfo.name,
+      profile_pic_data:
+        'https://images.unsplash.com/photo-1542103749-8ef59b94f47e?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+      address: customerInfo.address,
+      fiscal_code: customerInfo.fiscal_code,
+      role: 'Customer',
+    });
+    // 1 SEND CUSTOMER REGISTRATION DATA TO BACK-END
+    setTimeout(() => {
+      setCustomerRegistration({
+        ...customerRegistration,
+        success: true,
+        loading: false,
+      });
+    }, 2000);
+    setTimeout(() => {
+      setPage('home');
+    }, 2000);
+  };
+
+  const handleSubmitPerformerInfo = () => {
+    setPerformerRegistration({
+      ...performerRegistration,
+      loading: true,
+    });
+    console.log({
+      email: performerInfo.email,
+      password: performerInfo.password,
+      name: performerInfo.name,
+      category: performerInfo.category.value,
+      genre: performerInfo.genre.value,
+      cost_per_hour: performerInfo.cost_per_hour,
+      profile_pic_data:
+        'https://images.unsplash.com/photo-1542103749-8ef59b94f47e?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+      birthday: `${performerInfo.birthday.split('/')[0]}-${performerInfo.birthday.split('/')[1]}-${
+        performerInfo.birthday.split('/')[2]
+      }`,
+      search_city: performerInfo.search_city.value,
+      address: performerInfo.address,
+      fiscal_code: performerInfo.fiscal_code,
+      role: 'Performer',
+    });
+    // 2 SEND PERFORMER REGISTRATION DATA TO BACK-END
+    setTimeout(() => {
+      setPerformerRegistration({
+        ...performerRegistration,
+        success: true,
+        loading: false,
+      });
+    }, 2000);
+    setTimeout(() => {
+      setPage('home');
+    }, 2000);
+  };
+
+  const handleSubmitLogin = () => {
+    console.log({
+      email: userInfo.email,
+      password: userInfo.password,
+    });
+    // 3 SEND REQUESTO TO BACK TO MAKE LOGIN
+    // SAVE RESPONSE ON LOGGED PERFORMER OR LOGGED CUSTOMER (only the performer has the "category" attribute)
+    setLoggedCustomer({
+      name: 'Customer test',
+      profile_pic_url:
+        'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTB8fHBlcnNvbnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+      score: 3.3,
+      address: 'Street of wonderland',
+      fiscal_code: '12343242',
+      jobs: OFFERS,
+    });
+    setLoggedPerformer({
+      name: 'Performer test',
+      category: 'Test category',
+      genre: 'Test genre',
+      cost_per_hour: 220,
+      profile_pic_url:
+        'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTB8fHBlcnNvbnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+      birthday: '26-07-1997',
+      score: 5.5,
+      search_city: 'Viena',
+      address: 'Street of wonderland',
+      fiscal_code: '13424324',
+      money: 300,
+      jobs: OFFERS,
+    });
+    setPage('customer');
+  };
+
   // <<<<<<<<<<<<<<< RETURN FUNCTION >>>>>>>>>>>>>>>
 
   return (
@@ -88,7 +208,10 @@ const Spoint = () => {
 
       {page === 'home' && (
         <HomePage
-          handleLoginButtonClick={() => setPage('login')}
+          handleLoginButtonClick={async () => {
+            Api.get('').then((response) => console.log(response));
+            setPage('login');
+          }}
           handleSignUpButtonClick={() => setPage('enter-email')}
           handleDidntReceiveEmailClick={() => console.log('click')}
         />
@@ -99,14 +222,12 @@ const Spoint = () => {
       {page === 'login' && (
         <LoginPage
           handleForgotPassword={() => console.log('click')}
-          handleSubmitLogin={() => console.log('submit')}
+          handleSubmitLogin={handleSubmitLogin}
           handlePasswordTyped={(event) => {
             setUserInfo({ ...userInfo, password: event.target.value });
-            console.log(userInfo);
           }}
           handleEmailTyped={(event) => {
             setUserInfo({ ...userInfo, email: event.target.value });
-            console.log(userInfo);
           }}
           handleGoBackButtonClick={() => setPage('home')}
           emailValue={userInfo.email}
@@ -167,7 +288,6 @@ const Spoint = () => {
               ...performerInfo,
               name: value,
             });
-            console.log(performerInfo);
           }}
           handlePasswordTyped={(event) => {
             const { value } = event.target;
@@ -175,21 +295,18 @@ const Spoint = () => {
               ...performerInfo,
               password: value,
             });
-            console.log(performerInfo);
           }}
           handleCategorySelected={(event, newValue) => {
             setPerformerInfo({
               ...performerInfo,
               category: newValue ? newValue : null,
             });
-            console.log(performerInfo);
           }}
           handleGenreSelected={(event, newValue) => {
             setPerformerInfo({
               ...performerInfo,
               genre: newValue ? newValue : null,
             });
-            console.log(performerInfo);
           }}
           handleAdressTyped={(event) => {
             const { value } = event.target;
@@ -197,14 +314,12 @@ const Spoint = () => {
               ...performerInfo,
               address: value,
             });
-            console.log(performerInfo);
           }}
           handleSearchCitySelected={(event, newValue) => {
             setPerformerInfo({
               ...performerInfo,
               search_city: newValue ? newValue : null,
             });
-            console.log(performerInfo);
           }}
           handleFiscalCodeTyped={(event) => {
             const { value } = event.target;
@@ -212,7 +327,6 @@ const Spoint = () => {
               ...performerInfo,
               fiscal_code: value,
             });
-            console.log(performerInfo);
           }}
           handleCostPerHourTyped={(event) => {
             const { value } = event.target;
@@ -220,7 +334,6 @@ const Spoint = () => {
               ...performerInfo,
               cost_per_hour: value,
             });
-            console.log(performerInfo);
           }}
           handleBirthdayTyped={(event) => {
             const { value } = event.target;
@@ -228,7 +341,6 @@ const Spoint = () => {
               ...performerInfo,
               birthday: editBirthdayString(value),
             });
-            console.log(performerInfo);
           }}
           handleRemoveProfilePic={() => {
             setPerformerInfo({
@@ -263,7 +375,6 @@ const Spoint = () => {
                   url: URL.createObjectURL(file),
                 },
               });
-              console.log(performerInfo);
             }, 2000);
           }}
           handleCloseSuccessModal={() => {
@@ -279,19 +390,7 @@ const Spoint = () => {
               error: false,
             });
           }}
-          handleSubmitCustomerInfo={() => {
-            setPerformerRegistration({
-              ...performerRegistration,
-              loading: true,
-            });
-            setTimeout(() => {
-              setPerformerRegistration({
-                ...performerRegistration,
-                success: true,
-                loading: false,
-              });
-            }, 2000);
-          }}
+          handleSubmitPerformerInfo={handleSubmitPerformerInfo}
           loading={performerRegistration.loading}
           success={performerRegistration.success}
           error={performerRegistration.error}
@@ -315,7 +414,6 @@ const Spoint = () => {
               ...customerInfo,
               name: value,
             });
-            console.log(customerInfo);
           }}
           handlePasswordTyped={(event) => {
             const { value } = event.target;
@@ -323,7 +421,6 @@ const Spoint = () => {
               ...customerInfo,
               password: value,
             });
-            console.log(customerInfo);
           }}
           handleAdressTyped={(event) => {
             const { value } = event.target;
@@ -331,7 +428,6 @@ const Spoint = () => {
               ...customerInfo,
               address: value,
             });
-            console.log(customerInfo);
           }}
           handleFiscalCodeTyped={(event) => {
             const { value } = event.target;
@@ -339,7 +435,6 @@ const Spoint = () => {
               ...customerInfo,
               fiscal_code: value,
             });
-            console.log(customerInfo);
           }}
           handleBirthdayTyped={(event) => {
             const { value } = event.target;
@@ -347,7 +442,6 @@ const Spoint = () => {
               ...customerInfo,
               birthday: editBirthdayString(value),
             });
-            console.log(customerInfo);
           }}
           handleRemoveProfilePic={() => {
             setCustomerInfo({
@@ -382,7 +476,6 @@ const Spoint = () => {
                   url: URL.createObjectURL(file),
                 },
               });
-              console.log(customerInfo);
             }, 2000);
           }}
           handleCloseSuccessModal={() => {
@@ -398,19 +491,7 @@ const Spoint = () => {
               error: false,
             });
           }}
-          handleSubmitCustomerInfo={() => {
-            setCustomerRegistration({
-              ...customerRegistration,
-              loading: true,
-            });
-            setTimeout(() => {
-              setCustomerRegistration({
-                ...customerRegistration,
-                success: true,
-                loading: false,
-              });
-            }, 2000);
-          }}
+          handleSubmitCustomerInfo={handleSubmitCustomerInfo}
           loading={customerRegistration.loading}
           success={customerRegistration.success}
           error={customerRegistration.error}
@@ -418,10 +499,34 @@ const Spoint = () => {
       )}
 
       {/* <<<<<<<<<<<<< CUSTOMER APP >>>>>>>>>>>>>> */}
-      {page === 'customer' && <AppCustomer />}
+      {page === 'customer' && (
+        <AppCustomer
+          name={loggedCustomer.name}
+          profile_pic_url={loggedCustomer.profile_pic_url}
+          score={loggedCustomer.score}
+          address={loggedCustomer.address}
+          fiscal_code={loggedCustomer.fiscal_code}
+          jobs={loggedCustomer.jobs}
+        />
+      )}
 
       {/* <<<<<<<<<<<<< PERFORMER APP >>>>>>>>>>>>>> */}
-      {page === 'performer' && <AppPerformer />}
+      {page === 'performer' && (
+        <AppPerformer
+          name={loggedPerformer.name}
+          category={loggedPerformer.category}
+          genre={loggedPerformer.genre}
+          cost_per_hour={loggedPerformer.cost_per_hour}
+          profile_pic_url={loggedPerformer.profile_pic_url}
+          birthday={loggedPerformer.birthday}
+          score={loggedPerformer.score}
+          search_city={loggedPerformer.search_city}
+          address={loggedPerformer.address}
+          fiscal_code={loggedPerformer.fiscal_code}
+          money={loggedPerformer.money}
+          jobs={loggedPerformer.jobs}
+        />
+      )}
     </div>
   );
 };

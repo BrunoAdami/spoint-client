@@ -39,14 +39,14 @@ const AppCustomer = (props) => {
   const [performers, setPerformers] = useState(null);
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
-  // for profile page
-  const [customerInfo, setCustomerInfo] = useState({
-    name: '',
-    score: null,
-    profile_pic_url: null,
-    address: null,
-    fiscal_code: null,
-  });
+
+  // filters
+  const [cityFilter, setCityFilter] = useState(null);
+  const [categoryFilter, setCategoryFilter] = useState(null);
+  const [genreFilter, setGenreFilter] = useState(null);
+  const [minPrice, setMinPrice] = useState(null);
+  const [maxPrice, setMaxPrice] = useState(null);
+  // offers
   const [jobOffers, setJobOffers] = useState([
     {
       title: null,
@@ -84,8 +84,30 @@ const AppCustomer = (props) => {
   };
 
   const getPerformers = () => {
+    const filter = {};
+    setCityFilter(cityFilterValue);
+    setCategoryFilter(categoryFilterValue);
+    setGenreFilter(genreFilterValue);
+    setMinPrice(minPriceValue);
+    setMaxPrice(maxPriceValue);
+    if (cityFilter) filter['city'] = cityFilter;
+    if (categoryFilter) filter['category'] = categoryFilter;
+    if (genreFilter) filter['genre'] = genreFilter;
+    if (minPrice) filter['cost_minimum'] = minPrice;
+    if (maxPrice) filter['cost_max'] = maxPrice;
+    console.log(filter);
+    // 4 SEND SEARCH REQUEST TO BACK-END AND GET PERFORMERS
+    // LOADING
+    // UPDATE PERFORMERS ON STATE
+    // STOP LOADING
     setPerformers(Performers);
   };
+
+  let cityFilterValue = null;
+  let categoryFilterValue = null;
+  let genreFilterValue = null;
+  let minPriceValue = null;
+  let maxPriceValue = null;
 
   return (
     <div
@@ -124,41 +146,52 @@ const AppCustomer = (props) => {
             buttonText={'APPLY'}
             handleClose={() => {
               setOpenFilter(false);
+              getPerformers();
             }}
           >
             <Autocomplete
+              id="city-filter-selector"
               options={ITALY_CITIES.current}
-              handleOptionSelected={props.handleSearchCitySelected}
+              handleOptionSelected={(event, newValue) => {
+                cityFilterValue = newValue.value;
+              }}
               label={'CITY'}
-              value={props.searchCityValue}
               style={{ marginTop: 20, maxWidth: 'inherit' }}
             />
             <Autocomplete
+              id="category-filter-selector"
               options={CATEGORIES.current}
-              handleOptionSelected={props.handleCategorySelected}
+              handleOptionSelected={(event, newValue) => {
+                categoryFilterValue = newValue.value;
+              }}
               label={'CATEGORY'}
-              value={props.categoryValue}
               style={{ marginTop: 20, maxWidth: 'inherit' }}
             />
             {/* {((props.categoryValue && props.categoryValue.value === 'Singer') ||
           (props.categoryValue && props.categoryValue.value === 'Band')) && ( */}
             <Autocomplete
+              id="genre-filter-selector"
               options={MUSIC_GENRES.current}
-              handleOptionSelected={props.handleGenreSelected}
+              handleOptionSelected={(event, newValue) => {
+                genreFilterValue = newValue.value;
+              }}
               label={'GENRE'}
-              value={props.genreValue}
               style={{ marginTop: 20, maxWidth: 'inherit' }}
             />
             {/* )} */}
             <Input
               style={{ marginTop: 20, maxWidth: 'inherit' }}
-              handleInputTyped={() => console.log('type')}
+              handleInputTyped={(event) => {
+                minPriceValue = event.target.value;
+              }}
               placeholder={'Minimum Price €'}
               type="number"
             />
             <Input
               style={{ marginTop: 20, maxWidth: 'inherit' }}
-              handleInputTyped={() => console.log('type')}
+              handleInputTyped={(event) => {
+                maxPriceValue = event.target.value;
+              }}
               placeholder={'Maximum Price €'}
               type="number"
             />
@@ -177,7 +210,10 @@ const AppCustomer = (props) => {
             <div style={{ textAlign: 'center', fontSize: 'larger', fontWeight: 'bold' }}>{performerSelected.name}</div>
             <Input
               style={{ marginTop: 20, maxWidth: 'inherit' }}
-              handleInputTyped={(event) => handleUpdateDate(event)}
+              handleInputTyped={(event) => {
+                console.log(event.target.value);
+                //handleUpdateDate(event);
+              }}
               placeholder={'Starts at'}
               type="datetime-local"
             />
@@ -185,7 +221,7 @@ const AppCustomer = (props) => {
               style={{ marginTop: 20, maxWidth: 'inherit' }}
               handleInputTyped={() => console.log('type')}
               placeholder={'Ends at'}
-              type="datatime-local"
+              type="datetime-local"
             />
             <Input
               style={{ marginTop: 20, maxWidth: 'inherit' }}
@@ -261,9 +297,10 @@ const AppCustomer = (props) => {
           <div style={{ fontSize: 'xx-large', marginBottom: 20 }}>FIND YOUR PERFORMER</div>
           <Autocomplete
             options={ITALY_CITIES.current}
-            handleOptionSelected={props.handleSearchCitySelected}
+            handleOptionSelected={(event, newValue) => {
+              cityFilterValue = newValue.value;
+            }}
             label={'CITY'}
-            value={props.searchCityValue}
             style={{ marginBottom: 40 }}
           />
           <Button style={{ marginBottom: '10vh' }} onClick={() => getPerformers()}>
@@ -307,7 +344,7 @@ const AppCustomer = (props) => {
               <div style={{ fontWeight: 'bold', fontSize: 'large' }}>JOB OFFERS</div>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexWrap: 'wrap' }}>
-              {OFFERS.map((offer) => (
+              {props.jobs.map((offer) => (
                 <div style={{ margin: 20 }}>
                   <OfferCard {...offer} />
                 </div>
@@ -331,19 +368,19 @@ const AppCustomer = (props) => {
         >
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
             <img
-              src="https://miro.medium.com/max/1838/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
+              src={props.profile_pic_url}
               alt="Customer profile"
               style={{ height: '18vh', borderRadius: '50%', width: '18vh', objectFit: 'cover' }}
             />
-            <text style={{ margin: '2vh', fontWeight: 900, fontSize: 'xx-large' }}>Yoda</text>
+            <text style={{ margin: '2vh', fontWeight: 900, fontSize: 'xx-large' }}>{props.name}</text>
             <text style={{ marginBottom: '0.5vh', fontSize: 'large' }}>
-              Score: <strong>3.5 stars</strong>
+              Score: <strong>{props.score}</strong>
             </text>
             <text style={{ marginBottom: '0.5vh', fontSize: 'large' }}>
-              Address: <strong>Street XXXX XXXX</strong>
+              Address: <strong>{props.address}</strong>
             </text>
             <text style={{ marginBottom: '0.5vh', fontSize: 'large' }}>
-              Fiscal code: <strong>XXXXXXXXX</strong>
+              Fiscal code: <strong>{props.fiscal_code}</strong>
             </text>
           </div>
         </div>
@@ -373,7 +410,12 @@ const AppCustomer = (props) => {
 const { func, any, bool } = PropTypes;
 
 AppCustomer.propTypes = {
-  nameValue: any.isRequired,
+  name: any.isRequired,
+  profile_pic_url: any.isRequired,
+  score: any.isRequired,
+  address: any.isRequired,
+  fiscal_code: any.isRequired,
+  jobs: any.isRequired,
 };
 
 export default AppCustomer;

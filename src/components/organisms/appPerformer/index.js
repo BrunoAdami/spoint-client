@@ -25,20 +25,6 @@ const AppPerformer = (props) => {
   const [step, setStep] = useState(0);
   const [page, setPage] = useState('offers'); // pages are "offers" or "profile"
   const [loading, setLoading] = useState(false);
-  // for profile page
-  const [performerInfo, setPerformerInfo] = useState({
-    name: '',
-    category: '',
-    genre: '',
-    cost_per_hour: null,
-    profile_pic_url: null,
-    birthday: '',
-    score: null,
-    search_city: '',
-    address: '',
-    fiscalCode: null,
-    money: null,
-  });
   const [jobOffers, setJobOffers] = useState([
     {
       title: null,
@@ -109,7 +95,7 @@ const AppPerformer = (props) => {
               <div style={{ fontWeight: 'bold', fontSize: 'large' }}>JOB OFFERS</div>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexWrap: 'wrap' }}>
-              {OFFERS.map((offer) => (
+              {props.jobs.map((offer) => (
                 <div style={{ margin: 20 }}>
                   <OfferCard {...offer} isPerformer offerValue={200} />
                 </div>
@@ -133,19 +119,19 @@ const AppPerformer = (props) => {
         >
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
             <img
-              src="https://miro.medium.com/max/1838/1*mk1-6aYaf_Bes1E3Imhc0A.jpeg"
+              src={props.profile_pic_url}
               alt="Customer profile"
               style={{ height: '18vh', borderRadius: '50%', width: '18vh', objectFit: 'cover' }}
             />
-            <text style={{ margin: '2vh', fontWeight: 900, fontSize: 'xx-large' }}>Yoda</text>
+            <text style={{ margin: '2vh', fontWeight: 900, fontSize: 'xx-large' }}>{props.name}</text>
             <text style={{ marginBottom: '0.5vh', fontSize: 'large' }}>
-              Score: <strong>3.5 stars</strong>
+              Score: <strong>{props.score}</strong>
             </text>
             <text style={{ marginBottom: '0.5vh', fontSize: 'large' }}>
-              Address: <strong>Street XXXX XXXX</strong>
+              Address: <strong>{props.address}</strong>
             </text>
             <text style={{ marginBottom: '0.5vh', fontSize: 'large' }}>
-              Fiscal code: <strong>XXXXXXXXX</strong>
+              Fiscal code: <strong>{props.fiscal_code}</strong>
             </text>
           </div>
         </div>
@@ -175,7 +161,18 @@ const AppPerformer = (props) => {
 const { func, any, bool } = PropTypes;
 
 AppPerformer.propTypes = {
-  nameValue: any.isRequired,
+  name: any.isRequired,
+  category: any.isRequired,
+  genre: any.isRequired,
+  cost_per_hour: any.isRequired,
+  profile_pic_url: any.isRequired,
+  birthday: any.isRequired,
+  score: any.isRequired,
+  search_city: any.isRequired,
+  address: any.isRequired,
+  fiscal_code: any.isRequired,
+  money: any.isRequired,
+  jobs: any.isRequired,
 };
 
 export default AppPerformer;
