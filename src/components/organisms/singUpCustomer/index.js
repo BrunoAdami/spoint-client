@@ -67,7 +67,7 @@ const SignUpCustomer = (props) => {
               </Button>
             </div>
           )}
-          {/* <<<<<<<<<<<<<<< SECOND STEP: LOCATION & FINANCIAL>>>>>>>>>>>>>> */}
+          {/* <<<<<<<<<<<<<<< SECOND STEP: LOCATION & FINANCIAL >>>>>>>>>>>>>> */}
           {step === 1 && NotLoadingOrSuccessOrError && (
             <div
               style={{
@@ -165,7 +165,7 @@ const SignUpCustomer = (props) => {
                 <Button
                   style={{ marginTop: '40px', width: '100%' }}
                   onClick={props.handleSubmitCustomerInfo}
-                  disabled={props.profilePicValue ? (props.profilePicValue.data ? false : true) : true}
+                  disabled={props.profilePicValue ? (props.profilePicValue.url ? false : true) : true}
                 >
                   FINISH
                 </Button>

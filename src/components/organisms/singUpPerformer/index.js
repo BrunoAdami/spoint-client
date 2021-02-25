@@ -283,7 +283,7 @@ const SignUpPerformer = (props) => {
                 <Button
                   style={{ marginTop: '40px', width: '100%' }}
                   onClick={props.handleSubmitPerformerInfo}
-                  disabled={props.profilePicValue ? (props.profilePicValue.data ? false : true) : true}
+                  disabled={props.profilePicValue ? (props.profilePicValue.url ? false : true) : true}
                 >
                   FINISH
                 </Button>

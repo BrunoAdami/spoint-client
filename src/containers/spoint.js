@@ -12,6 +12,7 @@ import AppCustomer from '../components/organisms/appCustomer';
 import AppPerformer from '../components/organisms/appPerformer';
 import Api from '../services/api';
 import { OFFERS } from '../mock-data';
+import ReactS3Client from '../services/s3';
 
 const Spoint = () => {
   // <<<<<<<<<<<<<< STATE VARIABLES >>>>>>>>>>>>>>>
@@ -32,7 +33,6 @@ const Spoint = () => {
     genre: null,
     cost_per_hour: null,
     profile_pic: {
-      data: null,
       uploading: null,
       url: null,
     },
@@ -40,6 +40,7 @@ const Spoint = () => {
     search_city: null,
     address: null,
     fiscal_code: null,
+    profile_pic_url: null,
   });
   const [performerRegistration, setPerformerRegistration] = useState({
     loading: false,
@@ -69,12 +70,12 @@ const Spoint = () => {
     password: null,
     name: null,
     profile_pic: {
-      data: null,
       uploading: null,
       url: null,
     },
     address: null,
     fiscal_code: null,
+    profile_pic_url: null,
   });
   const [customerRegistration, setCustomerRegistration] = useState({
     loading: false,
@@ -109,7 +110,7 @@ const Spoint = () => {
     return v;
   };
 
-  const handleSubmitCustomerInfo = () => {
+  const handleSubmitCustomerInfo = async () => {
     setCustomerRegistration({
       ...customerRegistration,
       loading: true,
@@ -118,23 +119,34 @@ const Spoint = () => {
       email: customerInfo.email,
       password: customerInfo.password,
       name: customerInfo.name,
-      profile_pic_data:
-        'https://images.unsplash.com/photo-1542103749-8ef59b94f47e?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+      profile_pic_data: customerInfo.profile_pic_url,
       address: customerInfo.address,
       fiscal_code: customerInfo.fiscal_code,
       role: 'Customer',
     });
+
+    Api.post('/user', {
+      email: customerInfo.email,
+      password: customerInfo.password,
+      name: customerInfo.name,
+      profile_pic_data: customerInfo.profile_pic_url,
+      address: customerInfo.address,
+      fiscal_code: customerInfo.fiscal_code,
+      role: 'Customer',
+    })
+      .then((response) => {
+        setCustomerRegistration({
+          ...customerRegistration,
+          success: true,
+          loading: false,
+        });
+        setTimeout(() => {
+          setPage('home');
+        }, 3000);
+        console.log(`Response: \n ${response}`);
+      })
+      .catch((err) => console.error(err));
     // 1 SEND CUSTOMER REGISTRATION DATA TO BACK-END
-    setTimeout(() => {
-      setCustomerRegistration({
-        ...customerRegistration,
-        success: true,
-        loading: false,
-      });
-    }, 2000);
-    setTimeout(() => {
-      setPage('home');
-    }, 2000);
   };
 
   const handleSubmitPerformerInfo = () => {
@@ -358,23 +370,28 @@ const Spoint = () => {
             setPerformerInfo({
               ...performerInfo,
               profile_pic: {
-                data: null,
                 uploading: null,
                 url: null,
               },
             });
           }}
-          handleUploadProfilePic={(event) => {
+          handleUploadProfilePic={async (event) => {
             const file = event.target.files[0];
-            // SEND THAT FILE TO S3
+            try {
+              const response = await ReactS3Client.uploadFile(file, 'test');
+              const profilePicUrl = response.location;
+              setPerformerInfo({
+                ...performerInfo,
+                profile_pic_url: profilePicUrl,
+              });
+            } catch (err) {
+              console.error(err);
+            }
             event.target.value = null;
-            const profilePic = new FormData();
-            profilePic.append('image', file);
             setPerformerInfo({
               ...performerInfo,
               profile_pic: {
                 ...performerInfo.profile_pic,
-                data: null,
                 uploading: true,
               },
             });
@@ -383,7 +400,6 @@ const Spoint = () => {
                 ...performerInfo,
                 profile_pic: {
                   ...performerInfo.profile_pic,
-                  data: profilePic,
                   uploading: false,
                   url: URL.createObjectURL(file),
                 },
@@ -460,22 +476,28 @@ const Spoint = () => {
             setCustomerInfo({
               ...customerInfo,
               profile_pic: {
-                data: null,
                 uploading: null,
                 url: null,
               },
             });
           }}
-          handleUploadProfilePic={(event) => {
+          handleUploadProfilePic={async (event) => {
             const file = event.target.files[0];
+            try {
+              const response = await ReactS3Client.uploadFile(file, 'test');
+              const profilePicUrl = response.location;
+              setCustomerInfo({
+                ...customerInfo,
+                profile_pic_url: profilePicUrl,
+              });
+            } catch (err) {
+              console.error(err);
+            }
             event.target.value = null;
-            const profilePic = new FormData();
-            profilePic.append('image', file);
             setCustomerInfo({
               ...customerInfo,
               profile_pic: {
                 ...customerInfo.profile_pic,
-                data: null,
                 uploading: true,
               },
             });
@@ -484,7 +506,6 @@ const Spoint = () => {
                 ...customerInfo,
                 profile_pic: {
                   ...customerInfo.profile_pic,
-                  data: profilePic,
                   uploading: false,
                   url: URL.createObjectURL(file),
                 },
