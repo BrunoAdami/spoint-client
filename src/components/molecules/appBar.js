@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { IconButton } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
+import NoteIcon from '@material-ui/icons/Note';
 
 const desktopMode = window.innerWidth > 500;
 
@@ -23,9 +24,17 @@ const AppBar = (props) => {
         backgroundColor: Colors.SECONDARY,
       }}
     >
-      <IconButton onClick={props.handleHomeSelected}>
-        <HomeIcon
-          style={{ color: props.selectedPage === 'home' ? Colors.PRIMARY : Colors.INPUT_BACKGROUND }}
+      {!props.isPerformer && (
+        <IconButton onClick={props.handleHomeSelected}>
+          <HomeIcon
+            style={{ color: props.selectedPage === 'home' ? Colors.PRIMARY : Colors.INPUT_BACKGROUND }}
+            fontSize="large"
+          />
+        </IconButton>
+      )}
+      <IconButton onClick={props.handleOffersSelected}>
+        <NoteIcon
+          style={{ color: props.selectedPage === 'offers' ? Colors.PRIMARY : Colors.INPUT_BACKGROUND }}
           fontSize="large"
         />
       </IconButton>
@@ -41,10 +50,16 @@ const AppBar = (props) => {
 
 export default AppBar;
 
-const { string, func } = PropTypes;
+const { string, func, bool } = PropTypes;
 
 AppBar.propTypes = {
   selectedPage: string.isRequired,
   handleHomeSelected: func.isRequired,
   handleProfileSelected: func.isRequired,
+  handleOffersSelected: func.isRequired,
+  isPerformer: bool,
+};
+
+AppBar.defaultProps = {
+  isPerformer: false,
 };

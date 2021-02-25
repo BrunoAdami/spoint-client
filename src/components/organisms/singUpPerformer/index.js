@@ -282,8 +282,8 @@ const SignUpPerformer = (props) => {
                 )}
                 <Button
                   style={{ marginTop: '40px', width: '100%' }}
-                  onClick={props.handleSubmitCustomerInfo}
-                  disabled={props.profilePicValue ? (props.profilePicValue.data ? false : true) : true}
+                  onClick={props.handleSubmitPerformerInfo}
+                  disabled={props.profilePicValue ? (props.profilePicValue.url ? false : true) : true}
                 >
                   FINISH
                 </Button>
@@ -353,7 +353,7 @@ SignUpPerformer.propTypes = {
   handleUploadProfilePic: func.isRequired,
   handleCloseSuccessModal: func.isRequired,
   handleCloseErrorModal: func.isRequired,
-  handleSubmitCustomerInfo: func.isRequired,
+  handleSubmitPerformerInfo: func.isRequired,
   loading: bool.isRequired,
   success: bool.isRequired,
   error: bool.isRequired,
