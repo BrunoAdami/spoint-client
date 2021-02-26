@@ -19,6 +19,7 @@ import GENRES from '../../../genres.json';
 import { ITALIAN_CITIES } from '../../../istat-cities.json';
 import { findAllByDisplayValue } from '@testing-library/react';
 import OfferCard from '../../molecules/offerCard';
+import Api from '../../../services/api';
 
 const AppPerformer = (props) => {
   // STATE VARIABLES
@@ -164,17 +165,41 @@ const AppPerformer = (props) => {
         buttonText={'ACCEPT'}
         buttonText2={'REJECT'}
         isAcceptOfferCustomModal
-        handleClose={() => {
+        handleClose={async () => {
           console.log('accept Job');
-          props.jobs.find((offer) => offer.id === selectedOffer.id).status = 'accepted';
+          setLoading(true);
           setOpenOfferModal(false);
-          // 5 send accepted status to back-end
+          Api.post('/update_job/', {
+            job_id: selectedOffer.id,
+            status: 'accepted',
+          })
+            .then((response) => {
+              console.log(response.data);
+              props.jobs.find((offer) => offer.id === selectedOffer.id).status = 'accepted';
+              setLoading(false);
+            })
+            .catch((err) => {
+              console.error(err);
+              setLoading(false);
+            });
         }}
-        handleClose2={() => {
-          console.log('reject job');
-          props.jobs.find((offer) => offer.id === selectedOffer.id).status = 'rejected';
+        handleClose2={async () => {
+          console.log('reject Job');
+          setLoading(true);
           setOpenOfferModal(false);
-          //  6 SEND REJECTED STATUS TO BACK-END
+          Api.post('/update_job/', {
+            job_id: selectedOffer.id,
+            status: 'rejected',
+          })
+            .then((response) => {
+              console.log(response.data);
+              props.jobs.find((offer) => offer.id === selectedOffer.id).status = 'rejected';
+              setLoading(false);
+            })
+            .catch((err) => {
+              console.error(err);
+              setLoading(false);
+            });
         }}
       ></CustomModal>
 
