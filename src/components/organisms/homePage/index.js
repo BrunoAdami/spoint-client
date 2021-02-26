@@ -32,7 +32,7 @@ const HomePage = (props) => {
             cursor: 'pointer',
           }}
         >
-          Didn't receive the email?
+          Forget password?
         </text>
       </div>
       <text style={{ color: 'gray', position: 'absolute', bottom: '15px' }}>Spoint 2021</text>
