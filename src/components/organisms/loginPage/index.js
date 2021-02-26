@@ -37,6 +37,7 @@ const LoginPage = (props) => {
               handleInputTyped={props.handlePasswordTyped}
               placeholder="PASSWORD"
               value={props.passwordValue}
+              type="password"
             />
             <Button
               style={{ marginTop: '20px', width: '100%' }}
