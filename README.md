@@ -1,8 +1,6 @@
-# Spoint Client System. Follow the steps to run it: 
+# Spoint Client System. 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Available Scripts
+Follow the steps to run it: 
 
 In the project directory, you can run:
 
