@@ -19,6 +19,7 @@ import GENRES from '../../../genres.json';
 import { ITALIAN_CITIES } from '../../../istat-cities.json';
 import { findAllByDisplayValue } from '@testing-library/react';
 import OfferCard from '../../molecules/offerCard';
+import Api from '../../../services/api';
 
 const AppCustomer = (props) => {
   // STATE VARIABLES
@@ -76,6 +77,9 @@ const AppCustomer = (props) => {
       status: null,
     },
   ]);
+
+  //modals
+  const [openSuccessOffer, setOpenSuccessOffer] = useState(false);
   // DATA VARIABLES
   const MUSIC_GENRES = useRef(GENRES.map((item) => ({ value: item, name: item })));
   const CATEGORIES = useRef(PERFORMERS_CATEGORIES);
@@ -100,34 +104,43 @@ const AppCustomer = (props) => {
     console.log(startTime);
   };
 
-  const getPerformers = () => {
+  const getPerformers = async () => {
     const filter = {};
-    setCityFilter(cityFilterValue);
-    setCategoryFilter(categoryFilterValue);
-    setGenreFilter(genreFilterValue);
-    setMinPrice(minPriceValue);
-    setMaxPrice(maxPriceValue);
-    if (cityFilter) filter['city'] = cityFilter;
-    if (categoryFilter) filter['category'] = categoryFilter;
-    if (genreFilter) filter['genre'] = genreFilter;
-    if (minPrice) filter['cost_minimum'] = minPrice;
-    if (maxPrice) filter['cost_max'] = maxPrice;
+    // setCityFilter(cityFilterValue);
+    // setCategoryFilter(categoryFilterValue);
+    // setGenreFilter(genreFilterValue);
+    // setMinPrice(minPriceValue);
+    // setMaxPrice(maxPriceValue);
+    if (cityFilterValue) filter['city'] = cityFilterValue;
+    if (categoryFilterValue) filter['category'] = categoryFilterValue;
+    if (genreFilterValue) filter['genre'] = genreFilterValue;
+    if (minPriceValue) filter['cost_minimum'] = Number(minPriceValue);
+    if (maxPriceValue) filter['cost_max'] = Number(maxPriceValue);
     console.log(filter);
-    // 4 SEND SEARCH REQUEST TO BACK-END AND GET PERFORMERS
-    // LOADING
-    // UPDATE PERFORMERS ON STATE
-    // STOP LOADING
-    setPerformers(Performers);
+    setLoading(true);
+    Api.post('/search/', filter)
+      .then((response) => {
+        const { performers } = response.data;
+        console.log(performers);
+        setPerformers(performers);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
   };
 
   const handleSendOffer = () => {
-    const startDateArray = jobStartTimeValue.split('T')[0].split('-');
-    const startHour = jobStartTimeValue.split('T')[1];
-    const startTime = `${startDateArray[2]}-${startDateArray[1]}-${startDateArray[0]},${startHour}`;
-    const endDateArray = jobEndTimeValue.split('T')[0].split('-');
-    const endHour = jobEndTimeValue.split('T')[1];
-    const endTime = `${endDateArray[2]}-${endDateArray[1]}-${endDateArray[0]},${endHour}`;
-    console.log({
+    const startDateArray = jobStartTimeValue ? jobStartTimeValue.split('T')[0].split('-') : null;
+    const startHour = jobStartTimeValue ? jobStartTimeValue.split('T')[1] : null;
+    const startTime = jobStartTimeValue
+      ? `${startDateArray[2]}-${startDateArray[1]}-${startDateArray[0]},${startHour}`
+      : null;
+    const endDateArray = jobEndTimeValue ? jobEndTimeValue.split('T')[0].split('-') : null;
+    const endHour = jobEndTimeValue ? jobEndTimeValue.split('T')[1] : null;
+    const endTime = jobEndTimeValue ? `${endDateArray[2]}-${endDateArray[1]}-${endDateArray[0]},${endHour}` : null;
+    const offerData = {
       email: props.email,
       password: props.password,
       performer_id: performerSelected.id,
@@ -137,8 +150,21 @@ const AppCustomer = (props) => {
       end_time: endTime,
       address: jobAddressValue,
       price_per_hour: performerSelected.cost_per_hour,
-    });
-    // 5 SEND OFFER TO BACK END
+    };
+    console.log(offerData);
+
+    setLoading(true);
+    Api.post('/job/', offerData)
+      .then((response) => {
+        console.log(response.data);
+        setLoading(false);
+        setOpenSuccessOffer(true);
+      })
+      .catch((err) => {
+        console.error(err);
+        setLoading(false);
+      });
+
     setOpenSendOffer(false);
   };
 
@@ -157,6 +183,15 @@ const AppCustomer = (props) => {
       />
 
       {/* ############## HOME ############## */}
+
+      {/* successOffer */}
+      {openSuccessOffer && (
+        <Modal
+          title={'OFFER SENT!'}
+          subTitle={'Your offer was sent successfully'}
+          handleCloseButton={() => setOpenSuccessOffer(false)}
+        />
+      )}
 
       {/* <<<<<<<<<<<<<< FILTER PERFORMERS >>>>>>>>>>>>>> */}
 
@@ -237,6 +272,7 @@ const AppCustomer = (props) => {
             open={openSendOffer}
             buttonText={`SEND TO ${performerSelected.name.split(' ')[0]}`}
             handleClose={handleSendOffer}
+            basicClose={() => setOpenSendOffer(false)}
           >
             <div style={{ textAlign: 'center', fontSize: 'larger', fontWeight: 'bold' }}>{performerSelected.name}</div>
             <Input
@@ -289,7 +325,7 @@ const AppCustomer = (props) => {
                 justifyContent: 'space-evenly',
                 alignItems: 'center',
                 padding: '20px',
-                width: '100%',
+                width: '100vw',
               }}
             >
               <div style={{ fontWeight: 'bold', fontSize: 'large' }}>PERFORMERS FOUND</div>
@@ -297,6 +333,19 @@ const AppCustomer = (props) => {
                 <TuneIcon />
               </Button>
             </div>
+            {performers.length === 0 && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '62vh',
+                  fontStyle: 'italic',
+                }}
+              >
+                No performers found
+              </div>
+            )}
             <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexWrap: 'wrap' }}>
               {performers.map((performer) => (
                 <div style={{ margin: 20 }}>
@@ -371,14 +420,37 @@ const AppCustomer = (props) => {
             <div
               style={{
                 display: 'flex',
-                justifyContent: 'center',
+                justifyContent: 'space-evenly',
                 alignItems: 'center',
                 padding: '20px',
-                width: '100%',
+                width: '100vw',
               }}
             >
               <div style={{ fontWeight: 'bold', fontSize: 'large' }}>JOB OFFERS</div>
+              <Button
+                style={{ width: isDesktopMode ? '10vw' : '21vw' }}
+                onClick={async () => {
+                  setLoading(true);
+                  await props.updateJobs();
+                  setTimeout(() => setLoading(false), 2000);
+                }}
+              >
+                UPDATE
+              </Button>
             </div>
+            {props.jobs.length === 0 && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '62vh',
+                  fontStyle: 'italic',
+                }}
+              >
+                You've made no offers yet
+              </div>
+            )}
             <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexWrap: 'wrap' }}>
               {props.jobs.map((offer) => (
                 <div style={{ margin: 20 }}>

@@ -9,7 +9,7 @@ const Modal = (props) => {
     <div
       style={{
         height: '100%',
-        zIndex: 1,
+        zIndex: 3,
         position: 'absolute',
         top: 0,
         width: '100%',

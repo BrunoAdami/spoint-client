@@ -35,7 +35,7 @@ const Modal = (props) => {
           top: 0,
           maxHeight: '35px',
         }}
-        onClick={props.handleClose}
+        onClick={props.basicClose ? props.basicClose : props.handleClose}
       />
       <div
         style={{
