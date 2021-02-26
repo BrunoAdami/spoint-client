@@ -135,11 +135,11 @@ const AppCustomer = (props) => {
     const startDateArray = jobStartTimeValue ? jobStartTimeValue.split('T')[0].split('-') : null;
     const startHour = jobStartTimeValue ? jobStartTimeValue.split('T')[1] : null;
     const startTime = jobStartTimeValue
-      ? `${startDateArray[2]}-${startDateArray[1]}-${startDateArray[0]},${startHour}`
+      ? `${startDateArray[2]}-${startDateArray[1]}-${startDateArray[0]}, ${startHour}`
       : null;
     const endDateArray = jobEndTimeValue ? jobEndTimeValue.split('T')[0].split('-') : null;
     const endHour = jobEndTimeValue ? jobEndTimeValue.split('T')[1] : null;
-    const endTime = jobEndTimeValue ? `${endDateArray[2]}-${endDateArray[1]}-${endDateArray[0]},${endHour}` : null;
+    const endTime = jobEndTimeValue ? `${endDateArray[2]}-${endDateArray[1]}-${endDateArray[0]}, ${endHour}` : null;
     const offerData = {
       email: props.email,
       password: props.password,
