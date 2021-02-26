@@ -35,7 +35,7 @@ const HomePage = (props) => {
           Didn't receive the email?
         </text>
       </div>
-      <text style={{ color: 'gray', position: 'absolute', bottom: '15px' }}>Spoint 2020</text>
+      <text style={{ color: 'gray', position: 'absolute', bottom: '15px' }}>Spoint 2021</text>
     </div>
   );
 };
