@@ -1,5 +1,7 @@
 import S3 from 'react-aws-s3';
 
+export const S3BaseLink = 'https://spoint.s3-sa-east-1.amazonaws.com/';
+
 const config = {
   bucketName: 'spoint',
   //dirName: 'media' /* optional */,

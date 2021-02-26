@@ -3,58 +3,85 @@ import PropTypes from 'prop-types';
 import Button from '../../atoms/loginButton';
 import GoBackHeader from '../../molecules/goBackHeader';
 import Input from '../../atoms/input';
+import Loader from '../../atoms/loader';
 
 const LoginPage = (props) => {
   return (
     <div style={{ height: '100%' }}>
       <GoBackHeader style={{ position: 'absolute', top: 0 }} handleGoBackButtonClick={props.handleGoBackButtonClick} />
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          height: '100%',
-          alignItems: 'center',
-        }}
-      >
+      {!props.loading && (
         <div
           style={{
             display: 'flex',
-            alignItems: 'center',
             flexDirection: 'column',
-            width: '75%',
-            marginBottom: '200px',
+            justifyContent: 'center',
+            height: '100%',
+            alignItems: 'center',
           }}
         >
-          <text style={{ fontSize: 'xx-large', fontWeight: 'bold', marginBottom: '20px' }}>FILL YOUR INFORMATIONS</text>
-          <Input handleInputTyped={props.handleEmailTyped} placeholder="EMAIL" value={props.emailValue} />
-          <Input
-            style={{ marginTop: '20px' }}
-            handleInputTyped={props.handlePasswordTyped}
-            placeholder="PASSWORD"
-            value={props.passwordValue}
-          />
-          <Button
-            style={{ marginTop: '20px', width: '100%' }}
-            onClick={props.handleSubmitLogin}
-            disabled={props.passwordValue && props.emailValue ? false : true}
-          >
-            SUBMIT
-          </Button>
-          <text
-            onClick={props.handleForgotPassword}
+          <div
             style={{
-              marginTop: '20px',
-              color: 'white',
-              textDecoration: 'underline',
-              fontStyle: 'italic',
-              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: 'column',
+              width: '75%',
+              marginBottom: '200px',
             }}
           >
-            Forgot the password?
-          </text>
+            <text style={{ fontSize: 'xx-large', fontWeight: 'bold', marginBottom: '20px' }}>
+              FILL YOUR INFORMATIONS
+            </text>
+            <Input handleInputTyped={props.handleEmailTyped} placeholder="EMAIL" value={props.emailValue} />
+            <Input
+              style={{ marginTop: '20px' }}
+              handleInputTyped={props.handlePasswordTyped}
+              placeholder="PASSWORD"
+              value={props.passwordValue}
+            />
+            <Button
+              style={{ marginTop: '20px', width: '100%' }}
+              onClick={props.handleSubmitLogin}
+              disabled={props.passwordValue && props.emailValue ? false : true}
+            >
+              SUBMIT
+            </Button>
+            <text
+              onClick={props.handleForgotPassword}
+              style={{
+                marginTop: '20px',
+                color: 'white',
+                textDecoration: 'underline',
+                fontStyle: 'italic',
+                cursor: 'pointer',
+              }}
+            >
+              Forgot the password?
+            </text>
+          </div>
         </div>
-      </div>
+      )}
+      {/* <<<<<<<<<<<<<<< LOADING SCREEN >>>>>>>>>>>>>> */}
+      {props.loading && (
+        <div
+          style={{
+            display: 'flex',
+            height: '78%',
+            alignItems: 'center',
+          }}
+        >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              flexDirection: 'column',
+              width: '100%',
+            }}
+          >
+            <Loader style={{ height: '48px', margin: '20px' }} />
+            <text style={{ fontSize: 'xx-large', fontWeight: 'bold' }}>{'LOADING...'}</text>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
