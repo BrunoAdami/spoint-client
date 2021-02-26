@@ -161,7 +161,6 @@ const Spoint = () => {
       password: performerInfo.password,
       name: performerInfo.name,
       category: performerInfo.category.value,
-      genre: performerInfo.genre.value,
       cost_per_hour: performerInfo.cost_per_hour,
       profile_pic_url: performerInfo.profile_pic_url,
       birthday: `${performerInfo.birthday.split('/')[0]}-${performerInfo.birthday.split('/')[1]}-${
@@ -172,6 +171,7 @@ const Spoint = () => {
       fiscal_code: performerInfo.fiscal_code,
       role: 'Performer',
     };
+    if (performerInfo.genre) performerObject['genre'] = performerInfo.genre.value;
     console.log(performerObject);
     Api.post('/user/', performerObject)
       .then((response) => {
@@ -192,6 +192,46 @@ const Spoint = () => {
       });
   };
 
+  const handleUpdateJobsCustomer = async () => {
+    const userData = {
+      email: loggedCustomer.email,
+      password: loggedCustomer.password,
+    };
+
+    Api.post('/login/', userData)
+      .then((response) => {
+        const { user } = response.data;
+        console.log(user);
+        setLoggedCustomer({
+          ...loggedCustomer,
+          ...user,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleUpdateJobsPerformer = async () => {
+    const userData = {
+      email: loggedPerformer.email,
+      password: loggedPerformer.password,
+    };
+
+    Api.post('/login/', userData)
+      .then((response) => {
+        const { user } = response.data;
+        console.log(user);
+        setLoggedPerformer({
+          ...loggedPerformer,
+          ...user,
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const handleSubmitLogin = async () => {
     const userData = {
       email: userInfo.email,
@@ -203,11 +243,23 @@ const Spoint = () => {
       .then((response) => {
         const { user } = response.data;
         console.log(user);
+        setModalOpen({
+          ...modalOpen,
+          welcomeBack: true,
+        });
         if (user.category) {
-          setLoggedPerformer(user);
+          setLoggedPerformer({
+            email: userInfo.email,
+            password: userInfo.password,
+            ...user,
+          });
           setPage('performer');
         } else {
-          setLoggedCustomer(user);
+          setLoggedCustomer({
+            email: userInfo.email,
+            password: userInfo.password,
+            ...user,
+          });
           setPage('customer');
         }
         setLoginLoading(false);
@@ -318,7 +370,12 @@ const Spoint = () => {
         <Modal
           title={'WELCOME BACK'}
           subTitle={'WE ARE HAPPY TO SEE YOU AGAIN'}
-          handleCloseButton={() => console.log('close the modal')}
+          handleCloseButton={() =>
+            setModalOpen({
+              ...modalOpen,
+              welcomeBack: false,
+            })
+          }
         />
       )}
 
@@ -571,6 +628,7 @@ const Spoint = () => {
           handleLogout={() => {
             setPage('home');
           }}
+          updateJobs={handleUpdateJobsCustomer}
         />
       )}
 
@@ -595,6 +653,7 @@ const Spoint = () => {
           handleLogout={() => {
             setPage('home');
           }}
+          updateJobs={handleUpdateJobsPerformer}
         />
       )}
     </div>

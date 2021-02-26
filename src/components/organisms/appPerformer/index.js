@@ -98,14 +98,37 @@ const AppPerformer = (props) => {
             <div
               style={{
                 display: 'flex',
-                justifyContent: 'center',
+                justifyContent: 'space-evenly',
                 alignItems: 'center',
                 padding: '20px',
-                width: '100%',
+                width: '100vw',
               }}
             >
               <div style={{ fontWeight: 'bold', fontSize: 'large' }}>JOB OFFERS</div>
+              <Button
+                style={{ width: isDesktopMode ? '10vw' : '21vw' }}
+                onClick={async () => {
+                  setLoading(true);
+                  await props.updateJobs();
+                  setTimeout(() => setLoading(false), 2000);
+                }}
+              >
+                UPDATE
+              </Button>
             </div>
+            {props.jobs.length === 0 && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  height: '62vh',
+                  fontStyle: 'italic',
+                }}
+              >
+                You've received no offers yet
+              </div>
+            )}
             <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', flexWrap: 'wrap' }}>
               {props.jobs.map((offer) => (
                 <div style={{ margin: 20 }}>
