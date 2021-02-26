@@ -49,18 +49,23 @@ const PerformerCard = (props) => {
       <div className={classes.details}>
         <CardContent className={classes.content}>
           <div style={{ fontSize: 'larger', fontWeight: 'bold', textAlign: 'start' }}>{props.title}</div>
-          <div
-            style={{ color: '#414046', fontSize: 'medium', fontWeight: 'bold', textAlign: 'start' }}
-          >{`Start time: ${props.startTime}`}</div>
-          <div
-            style={{ color: '#414046', fontSize: 'medium', fontWeight: 'bold', textAlign: 'start' }}
-          >{`End time: ${props.endTime}`}</div>
+          <div style={{ color: '#414046', fontSize: 'medium', fontWeight: 'bold', textAlign: 'start' }}>{`Start time: ${
+            props.startTime.split('T')[0]
+          }, ${props.startTime.split('T')[1].split(':')[0]}:${props.startTime.split('T')[1].split(':')[1]}`}</div>
+          <div style={{ color: '#414046', fontSize: 'medium', fontWeight: 'bold', textAlign: 'start' }}>{`End time: ${
+            props.endTime.split('T')[0]
+          }, ${props.endTime.split('T')[1].split(':')[0]}:${props.endTime.split('T')[1].split(':')[1]}`}</div>
           <div
             style={{ color: '#414046', fontSize: 'medium', fontWeight: 'bold', textAlign: 'start' }}
           >{`Adress: ${props.address}`}</div>
           <div style={{ color: '#414046', fontSize: 'medium', fontWeight: 'bold', textAlign: 'start' }}>
             {props.isPerformer ? `Customer: ${props.customerName}` : `Performer: ${props.performerName}`}
           </div>
+          {props.status === 'accepted' && (
+            <div style={{ color: 'rgb(23 162 58)', fontSize: 'medium', fontWeight: 'bold', textAlign: 'start' }}>
+              {!props.isPerformer ? `Contact: ${props.performerEmail}` : `Contact: ${props.customerEmail}`}
+            </div>
+          )}
         </CardContent>
         {!props.isPerformer && (
           <div
@@ -69,14 +74,14 @@ const PerformerCard = (props) => {
               backgroundColor:
                 props.status === 'accepted'
                   ? '#32a852'
-                  : props.status === 'pending'
+                  : props.status === 'Pending'
                   ? '#a86d32'
                   : props.status === 'rejected'
                   ? '#a83a32'
                   : '#a83a32',
             }}
           >
-            <div style={{ fontSize: 'x-large' }}>{props.status}</div>
+            <div style={{ fontSize: 'x-large' }}>{props.status.toLowerCase()}</div>
           </div>
         )}
         {props.isPerformer && (props.status === 'accepted' || props.status === 'rejected') && (
@@ -86,14 +91,14 @@ const PerformerCard = (props) => {
               backgroundColor:
                 props.status === 'accepted'
                   ? '#32a852'
-                  : props.status === 'pending'
+                  : props.status === 'Pending'
                   ? '#a86d32'
                   : props.status === 'rejected'
                   ? '#a83a32'
                   : '#a83a32',
             }}
           >
-            <div style={{ fontSize: 'x-large' }}>{props.status}</div>
+            <div style={{ fontSize: 'x-large' }}>{props.status.toLowerCase()}</div>
           </div>
         )}
         {props.isPerformer && props.status !== 'accepted' && props.status !== 'rejected' && (

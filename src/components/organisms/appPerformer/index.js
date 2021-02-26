@@ -84,11 +84,12 @@ const AppPerformer = (props) => {
             height: 'auto',
             alignItems: 'center',
             backgroundColor: Colors.SECONDARY,
+            width: '100%',
           }}
         >
           <div
             style={{
-              padding: 20,
+              padding: '20px 0',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -101,7 +102,7 @@ const AppPerformer = (props) => {
                 display: 'flex',
                 justifyContent: 'space-evenly',
                 alignItems: 'center',
-                padding: '20px',
+                padding: '20px 0',
                 width: '100vw',
               }}
             >
@@ -139,8 +140,8 @@ const AppPerformer = (props) => {
                     endTime={offer.end_time}
                     id={offer.id}
                     status={offer.status}
-                    customerName={offer.customerName}
-                    performerName={offer.performerName}
+                    customerName={offer.customer_name}
+                    performerName={offer.performer_name}
                     address={offer.address}
                     isPerformer
                     offerValue={offer.price_per_hour}
@@ -149,6 +150,8 @@ const AppPerformer = (props) => {
                       console.log(selectedOffer);
                       setOpenOfferModal(true);
                     }}
+                    customerEmail={offer.customer_email}
+                    performerEmail={offer.performer_email}
                   />
                 </div>
               ))}
