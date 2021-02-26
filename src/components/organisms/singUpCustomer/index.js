@@ -191,7 +191,10 @@ const SignUpCustomer = (props) => {
             <Modal
               title="ALL INFORMATIONS HAVE BEEN VALIDATED"
               subTitle="WE WISH YOU A NICE EXPERIENCE ON SPOINT"
-              handleCloseButton={props.handleCloseSuccessModal}
+              handleCloseButton={() => {
+                setStep(0);
+                props.handleCloseSuccessModal();
+              }}
             />
           )}
           {/* <<<<<<<<<<<<<<< ERROR SCREEN >>>>>>>>>>>>>> */}

@@ -427,6 +427,16 @@ const AppCustomer = (props) => {
             <text style={{ marginBottom: '0.5vh', fontSize: 'large' }}>
               Fiscal code: <strong>{props.fiscal_code}</strong>
             </text>
+            <Button
+              onClick={props.handleLogout}
+              style={{
+                color: 'white',
+                background: `linear-gradient(45deg, rgb(93 32 78) 30%, rgb(162 79 143) 90%)`,
+                marginTop: '12vh',
+              }}
+            >
+              Logout
+            </Button>
           </div>
         </div>
       )}

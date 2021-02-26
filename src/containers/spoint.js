@@ -13,6 +13,7 @@ import AppPerformer from '../components/organisms/appPerformer';
 import Api from '../services/api';
 import { OFFERS } from '../mock-data';
 import ReactS3Client from '../services/s3';
+import rand from 'random-key';
 
 const Spoint = () => {
   // <<<<<<<<<<<<<< STATE VARIABLES >>>>>>>>>>>>>>>
@@ -93,6 +94,8 @@ const Spoint = () => {
     fiscal_code: null,
     jobs: null,
   });
+  // Login
+  const [loginLoading, setLoginLoading] = useState(false);
   // Modals
   const [modalOpen, setModalOpen] = useState({
     welcomeBack: false,
@@ -115,38 +118,36 @@ const Spoint = () => {
       ...customerRegistration,
       loading: true,
     });
-    console.log({
+    console.log(customerInfo);
+    console.log(customerInfo.profile_pic_url);
+    const customerObject = {
       email: customerInfo.email,
       password: customerInfo.password,
       name: customerInfo.name,
-      profile_pic_data: customerInfo.profile_pic_url,
+      profile_pic_url: customerInfo.profile_pic_url,
       address: customerInfo.address,
       fiscal_code: customerInfo.fiscal_code,
       role: 'Customer',
-    });
+    };
+    console.log(customerObject);
 
-    Api.post('/user', {
-      email: customerInfo.email,
-      password: customerInfo.password,
-      name: customerInfo.name,
-      profile_pic_data: customerInfo.profile_pic_url,
-      address: customerInfo.address,
-      fiscal_code: customerInfo.fiscal_code,
-      role: 'Customer',
-    })
+    Api.post('/user/', customerObject)
       .then((response) => {
         setCustomerRegistration({
           ...customerRegistration,
           success: true,
           loading: false,
         });
-        setTimeout(() => {
-          setPage('home');
-        }, 3000);
-        console.log(`Response: \n ${response}`);
+        console.log(response.data);
       })
-      .catch((err) => console.error(err));
-    // 1 SEND CUSTOMER REGISTRATION DATA TO BACK-END
+      .catch((err) => {
+        setCustomerRegistration({
+          ...customerRegistration,
+          loading: false,
+          error: true,
+        });
+        console.error(err);
+      });
   };
 
   const handleSubmitPerformerInfo = () => {
@@ -154,15 +155,15 @@ const Spoint = () => {
       ...performerRegistration,
       loading: true,
     });
-    console.log({
+
+    const performerObject = {
       email: performerInfo.email,
       password: performerInfo.password,
       name: performerInfo.name,
       category: performerInfo.category.value,
       genre: performerInfo.genre.value,
       cost_per_hour: performerInfo.cost_per_hour,
-      profile_pic_data:
-        'https://images.unsplash.com/photo-1542103749-8ef59b94f47e?ixid=MXwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
+      profile_pic_url: performerInfo.profile_pic_url,
       birthday: `${performerInfo.birthday.split('/')[0]}-${performerInfo.birthday.split('/')[1]}-${
         performerInfo.birthday.split('/')[2]
       }`,
@@ -170,58 +171,111 @@ const Spoint = () => {
       address: performerInfo.address,
       fiscal_code: performerInfo.fiscal_code,
       role: 'Performer',
-    });
-    // 2 SEND PERFORMER REGISTRATION DATA TO BACK-END
-    setTimeout(() => {
-      setPerformerRegistration({
-        ...performerRegistration,
-        success: true,
-        loading: false,
+    };
+    console.log(performerObject);
+    Api.post('/user/', performerObject)
+      .then((response) => {
+        setPerformerRegistration({
+          ...performerRegistration,
+          success: true,
+          loading: false,
+        });
+        console.log(response.data);
+      })
+      .catch((err) => {
+        setPerformerRegistration({
+          ...performerRegistration,
+          loading: false,
+          error: true,
+        });
+        console.error(err);
       });
-    }, 2000);
+  };
+
+  const handleSubmitLogin = async () => {
+    const userData = {
+      email: userInfo.email,
+      password: userInfo.password,
+    };
+
+    setLoginLoading(true);
+    Api.post('/login/', userData)
+      .then((response) => {
+        const { user } = response.data;
+        console.log(user);
+        if (user.category) {
+          setLoggedPerformer(user);
+          setPage('performer');
+        } else {
+          setLoggedCustomer(user);
+          setPage('customer');
+        }
+        setLoginLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoginLoading(false);
+      });
+  };
+
+  const handleUploadPerformerProfilePic = async (event) => {
+    const file = event.target.files[0];
+    let profilePicUrl;
+    try {
+      const response = await ReactS3Client.uploadFile(file, rand.generate());
+      profilePicUrl = response.location;
+    } catch (err) {
+      console.error(err);
+    }
+    event.target.value = null;
+    setPerformerInfo({
+      ...performerInfo,
+      profile_pic: {
+        ...performerInfo.profile_pic,
+        uploading: true,
+      },
+    });
     setTimeout(() => {
-      setPage('home');
+      setPerformerInfo({
+        ...performerInfo,
+        profile_pic_url: profilePicUrl,
+        profile_pic: {
+          ...performerInfo.profile_pic,
+          uploading: false,
+          url: URL.createObjectURL(file),
+        },
+      });
     }, 2000);
   };
 
-  const handleSubmitLogin = () => {
-    console.log({
-      email: userInfo.email,
-      password: userInfo.password,
+  const handleUploadCustomerProfilePic = async (event) => {
+    const file = event.target.files[0];
+    let profilePicUrl;
+    try {
+      const response = await ReactS3Client.uploadFile(file, rand.generate());
+      profilePicUrl = response.location;
+      console.log(profilePicUrl);
+    } catch (err) {
+      console.error(err);
+    }
+    setCustomerInfo({
+      ...customerInfo,
+      profile_pic: {
+        ...customerInfo.profile_pic,
+        uploading: true,
+      },
     });
-    // 3 SEND REQUESTO TO BACK TO MAKE LOGIN
-    // SAVE RESPONSE ON LOGGED PERFORMER OR LOGGED CUSTOMER (only the performer has the "category" attribute)
-    setLoggedCustomer({
-      id: 1,
-      email: 'testemail@gmail.com',
-      password: 'testpassword',
-      name: 'Customer test',
-      profile_pic_url:
-        'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTB8fHBlcnNvbnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-      score: 3.3,
-      address: 'Street of wonderland',
-      fiscal_code: '12343242',
-      jobs: OFFERS,
-    });
-    setLoggedPerformer({
-      id: 2,
-      email: 'testemail@gmail.com',
-      password: 'testpassword',
-      name: 'Performer test',
-      category: 'Test category',
-      genre: 'Test genre',
-      cost_per_hour: 220,
-      profile_pic_url:
-        'https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixid=MXwxMjA3fDB8MHxzZWFyY2h8MTB8fHBlcnNvbnxlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60',
-      birthday: '26-07-1997',
-      score: 5.5,
-      search_city: 'Viena',
-      address: 'Street of wonderland',
-      fiscal_code: '13424324',
-      money: 300,
-      jobs: OFFERS,
-    });
-    setPage('performer');
+    setTimeout(() => {
+      setCustomerInfo({
+        ...customerInfo,
+        profile_pic_url: profilePicUrl,
+        profile_pic: {
+          ...customerInfo.profile_pic,
+          uploading: false,
+          url: URL.createObjectURL(file),
+        },
+      });
+    }, 2000);
   };
 
   // <<<<<<<<<<<<<<< RETURN FUNCTION >>>>>>>>>>>>>>>
@@ -256,6 +310,7 @@ const Spoint = () => {
           handleGoBackButtonClick={() => setPage('home')}
           emailValue={userInfo.email}
           passwordValue={userInfo.password}
+          loading={loginLoading}
         />
       )}
       {/* Welcome back */}
@@ -375,42 +430,29 @@ const Spoint = () => {
               },
             });
           }}
-          handleUploadProfilePic={async (event) => {
-            const file = event.target.files[0];
-            try {
-              const response = await ReactS3Client.uploadFile(file, 'test');
-              const profilePicUrl = response.location;
-              setPerformerInfo({
-                ...performerInfo,
-                profile_pic_url: profilePicUrl,
-              });
-            } catch (err) {
-              console.error(err);
-            }
-            event.target.value = null;
-            setPerformerInfo({
-              ...performerInfo,
-              profile_pic: {
-                ...performerInfo.profile_pic,
-                uploading: true,
-              },
-            });
-            setTimeout(() => {
-              setPerformerInfo({
-                ...performerInfo,
-                profile_pic: {
-                  ...performerInfo.profile_pic,
-                  uploading: false,
-                  url: URL.createObjectURL(file),
-                },
-              });
-            }, 2000);
-          }}
+          handleUploadProfilePic={handleUploadPerformerProfilePic}
           handleCloseSuccessModal={() => {
-            setPage('home-performer');
+            setPage('home');
             setPerformerRegistration({
               ...performerRegistration,
               success: false,
+            });
+            setPerformerInfo({
+              email: null,
+              password: null,
+              name: null,
+              category: null,
+              genre: null,
+              cost_per_hour: null,
+              profile_pic: {
+                uploading: null,
+                url: null,
+              },
+              birthday: null,
+              search_city: null,
+              address: null,
+              fiscal_code: null,
+              profile_pic_url: null,
             });
           }}
           handleCloseErrorModal={() => {
@@ -481,42 +523,24 @@ const Spoint = () => {
               },
             });
           }}
-          handleUploadProfilePic={async (event) => {
-            const file = event.target.files[0];
-            try {
-              const response = await ReactS3Client.uploadFile(file, 'test');
-              const profilePicUrl = response.location;
-              setCustomerInfo({
-                ...customerInfo,
-                profile_pic_url: profilePicUrl,
-              });
-            } catch (err) {
-              console.error(err);
-            }
-            event.target.value = null;
-            setCustomerInfo({
-              ...customerInfo,
-              profile_pic: {
-                ...customerInfo.profile_pic,
-                uploading: true,
-              },
-            });
-            setTimeout(() => {
-              setCustomerInfo({
-                ...customerInfo,
-                profile_pic: {
-                  ...customerInfo.profile_pic,
-                  uploading: false,
-                  url: URL.createObjectURL(file),
-                },
-              });
-            }, 2000);
-          }}
+          handleUploadProfilePic={handleUploadCustomerProfilePic}
           handleCloseSuccessModal={() => {
-            setPage('home-customer');
+            setPage('home');
             setCustomerRegistration({
               ...customerRegistration,
               success: false,
+            });
+            setCustomerInfo({
+              email: null,
+              password: null,
+              name: null,
+              profile_pic: {
+                uploading: null,
+                url: null,
+              },
+              address: null,
+              fiscal_code: null,
+              profile_pic_url: null,
             });
           }}
           handleCloseErrorModal={() => {
@@ -544,6 +568,9 @@ const Spoint = () => {
           address={loggedCustomer.address}
           fiscal_code={loggedCustomer.fiscal_code}
           jobs={loggedCustomer.jobs}
+          handleLogout={() => {
+            setPage('home');
+          }}
         />
       )}
 
@@ -565,6 +592,9 @@ const Spoint = () => {
           fiscal_code={loggedPerformer.fiscal_code}
           money={loggedPerformer.money}
           jobs={loggedPerformer.jobs}
+          handleLogout={() => {
+            setPage('home');
+          }}
         />
       )}
     </div>
