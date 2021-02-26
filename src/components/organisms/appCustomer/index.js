@@ -135,11 +135,11 @@ const AppCustomer = (props) => {
     const startDateArray = jobStartTimeValue ? jobStartTimeValue.split('T')[0].split('-') : null;
     const startHour = jobStartTimeValue ? jobStartTimeValue.split('T')[1] : null;
     const startTime = jobStartTimeValue
-      ? `${startDateArray[2]}-${startDateArray[1]}-${startDateArray[0]}, ${startHour}`
+      ? `${startDateArray[0]}-${startDateArray[1]}-${startDateArray[2]},${startHour}`
       : null;
     const endDateArray = jobEndTimeValue ? jobEndTimeValue.split('T')[0].split('-') : null;
     const endHour = jobEndTimeValue ? jobEndTimeValue.split('T')[1] : null;
-    const endTime = jobEndTimeValue ? `${endDateArray[2]}-${endDateArray[1]}-${endDateArray[0]}, ${endHour}` : null;
+    const endTime = jobEndTimeValue ? `${endDateArray[0]}-${endDateArray[1]}-${endDateArray[2]},${endHour}` : null;
     const offerData = {
       email: props.email,
       password: props.password,
@@ -311,7 +311,7 @@ const AppCustomer = (props) => {
 
           <div
             style={{
-              padding: 20,
+              padding: '20px 0',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -324,7 +324,7 @@ const AppCustomer = (props) => {
                 display: 'flex',
                 justifyContent: 'space-evenly',
                 alignItems: 'center',
-                padding: '20px',
+                padding: '20px 0',
                 width: '100vw',
               }}
             >
@@ -350,7 +350,7 @@ const AppCustomer = (props) => {
               {performers.map((performer) => (
                 <div style={{ margin: 20 }}>
                   <PerformerCard
-                    name={performer.name}
+                    name={performer.name.split(' ')[0]}
                     category={performer.category}
                     genre={performer.genre}
                     price_per_hour={performer.cost_per_hour}
@@ -405,11 +405,12 @@ const AppCustomer = (props) => {
             height: 'auto',
             alignItems: 'center',
             backgroundColor: Colors.SECONDARY,
+            width: '100%',
           }}
         >
           <div
             style={{
-              padding: 20,
+              padding: '20px 0',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -422,7 +423,7 @@ const AppCustomer = (props) => {
                 display: 'flex',
                 justifyContent: 'space-evenly',
                 alignItems: 'center',
-                padding: '20px',
+                padding: '20px 0',
                 width: '100vw',
               }}
             >
@@ -460,9 +461,11 @@ const AppCustomer = (props) => {
                     endTime={offer.end_time}
                     id={offer.id}
                     status={offer.status}
-                    customerName={offer.customerName}
-                    performerName={offer.performerName}
+                    customerName={offer.customer_name}
+                    performerName={offer.performer_name}
                     address={offer.address}
+                    customerEmail={offer.customer_email}
+                    performerEmail={offer.performer_email}
                   />
                 </div>
               ))}
